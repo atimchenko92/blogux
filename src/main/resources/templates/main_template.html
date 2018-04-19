@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="https://getbootstrap.com/favicon.ico">
+      <link rel="icon" th:href="@{/images/fly.png}">
 
-    <title>Template</title>
+    <title>blogux:: micro-blogging platform</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-beta/css/bootstrap.min.css}"/>
@@ -18,73 +18,21 @@
   </head>
 
   <body class="bg-light">
-
-    <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">blogux</a>
-      <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="navbar-collapse offcanvas-collapse open" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">My Timeline<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Global Timeline</a>
-          </li>
-    <li class="nav-item">
-    <a class="nav-link" href="#">My followers     <span class="badge badge-pill bg-light align-text-bottom" style="color:black">27</span>
-        </a>
-        </li>
-<li class="nav-item">
-    <a class="nav-link" href="#">Following     <span class="badge badge-pill bg-light align-text-bottom" style="color:black">10</span>
-        </a>
-        </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    	<ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Settings<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Logout</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <div class="nav-scroller bg-white box-shadow">
-      <nav class="nav nav-underline">
-    	<a class="nav-link active" href="#">
-          All Posts
-          <span class="badge badge-pill bg-light align-text-bottom">42</span>
-        </a>
-        <a class="nav-link" href="#">
-          My Posts
-          <span class="badge badge-pill bg-light align-text-bottom">27</span>
-        </a>
-        <a class="nav-link" href="#">
-          Following Posts
-          <span class="badge badge-pill bg-light align-text-bottom">15</span>
-        </a>
-      </nav>
+    <div class=header_container>
+      <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
     </div>
-  </main>
 
-    <main role="main" class="container">
-
+    <div class=container>
+      <!--/*/ <th:block th:include="fragments/newpost :: newpost"></th:block> /*/-->
+      <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
+    </div>
 
     <!-- Bootstrap core JavaScript
       ================================================== -->
   	<!-- Placed at the end of the document so the pages load faster -->
   	<script th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.13.0-next/dist/umd/popper.min.js}"></script>
   	<script th:src="@{/webjars/bootstrap/4.0.0-beta/js/bootstrap.min.js}"></script>
 
-
-
-</body>
+  </body>
 </html>

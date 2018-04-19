@@ -53,7 +53,11 @@
 			<version>2.1.4</version>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>popper.js</artifactId>
+			<version>1.13.0-next</version>
+		</dependency>
 	</dependencies>
 
 	<build>

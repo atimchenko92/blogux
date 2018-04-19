@@ -18,7 +18,7 @@ public class BloguxController {
 	}
 
 	@RequestMapping(value = "/")
-	public String signupSubmit(@ModelAttribute Home home, Model model) {
+	public String loadHomePage(@ModelAttribute Home home, Model model) {
 		model.addAttribute("home", home != null ? home : new Home());
 		return "main_template";
 	}
