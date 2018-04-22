@@ -78,3 +78,6 @@ target/
 .settings/
 .project
 .classpath
+
+# Redis dumps
+*.rdb
