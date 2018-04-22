@@ -1,4 +1,4 @@
-package de.hska.lkit.blogux.places;
+package de.hska.lkit.blogux.model;
 
 public class Signup {
 
