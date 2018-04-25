@@ -13,12 +13,12 @@ public class RedisConfiguration {
 	@Bean
 	public JedisConnectionFactory getConnectionFactory() {
 		// falls andere als die Default Werte gesetzt werden sollen
-		JedisConnectionFactory jRedisConnectionFactory = new JedisConnectionFactory(new JedisPoolConfig());
-		jRedisConnectionFactory.setHostName("localhost");
-		jRedisConnectionFactory.setPort(6379);
-		jRedisConnectionFactory.setPassword("");
-		return jRedisConnectionFactory;
-	//	return new JedisConnectionFactory();
+	//	JedisConnectionFactory jRedisConnectionFactory = new JedisConnectionFactory(new JedisPoolConfig());
+	//	jRedisConnectionFactory.setHostName("localhost");
+	//  jRedisConnectionFactory.setPort(6379);
+	//	jRedisConnectionFactory.setPassword("");
+	//	return jRedisConnectionFactory;
+		return new JedisConnectionFactory();
 	}
 
 	@Bean(name = "stringRedisTemplate")

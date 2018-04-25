@@ -18,18 +18,19 @@
   </head>
 
   <body class="text-center">
-    <form class="form-signin" action="#"
-			th:object="${user}" method="post" th:action="@{/signup}" >
+    <form class="form-signin" action="#" th:object="${signup}"
+      method="post" th:action="@{/signup}" >
       <img class="mb-4" th:src="@{/images/fly.png}" alt="" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
-      <input type="text" id="inputUsername" class="form-control"
-        placeholder="Username" required="" th:field="*{username}">
+      <input type="text" class="form-control"
+        placeholder="Username" required="" th:field="*{name}">
       <div class="checkbox mb-3"></div>
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" id="inputPassword" class="form-control"
-       placeholder="Enter new password" th:field="*{password}" required="">
+       placeholder="Enter new password" th:field="*{pwd}" required="">
      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword2" class="form-control" placeholder="Repeat password" required="">
+      <input type="password" th:field="*{pwdConfirm}"
+        class="form-control" placeholder="Repeat password" required="">
       <div class="checkbox mb-3">
 
       </div>

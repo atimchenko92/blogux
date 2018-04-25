@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisZSetCommands.Range;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
@@ -21,7 +20,6 @@ import de.hska.lkit.blogux.repo.UserRepository;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-
 	private static final String KEY_SET_ALL_USERNAMES 	= "all:usernames";
 
 	private static final String KEY_ZSET_ALL_USERNAMES 	= "all:usernames:sorted";
@@ -64,6 +62,8 @@ public class UserRepositoryImpl implements UserRepository {
 	 */
 	@Resource(name="redisTemplate")
 	private HashOperations<String, String, User> rt_hashOps;
+
+
 	@Autowired
 		public UserRepositoryImpl(RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate) {
 			this.redisTemplate = redisTemplate;
@@ -79,18 +79,29 @@ public class UserRepositoryImpl implements UserRepository {
 			srt_zSetOps = stringRedisTemplate.opsForZSet();
 		}
 
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see
-		 * hska.iwi.vslab.repo.UserRepository#saveUser(hska.iwi.vslab.model.User)
-		 */
 		@Override
-		public void saveUser(User user) {
+		public void createUser(User user) {
 			// generate a unique id
 			String id = String.valueOf(userid.incrementAndGet());
+			user.setId(id);
 
+			String key = KEY_PREFIX_USER + user.getUsername();
+			srt_hashOps.put(key, "id", id);
+			srt_hashOps.put(key, "username", user.getUsername());
+			srt_hashOps.put(key, "password", user.getPassword());
+			// the key for a new user is added to the set for all usernames
+			srt_setOps.add(KEY_SET_ALL_USERNAMES, user.getUsername());
+			// the key for a new user is added to the sorted set for all usernames
+			srt_zSetOps.add(KEY_ZSET_ALL_USERNAMES, user.getUsername(), 0);
+			// to show how objects can be saved
+			rt_hashOps.put(KEY_HASH_ALL_USERS, key, user);
+		}
+
+
+		@Override
+		public void saveUser(User user) {
+			// TODO: check if user exists
+/*
 			user.setId(id);
 
 			// to show how objects can be saved
@@ -110,6 +121,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 			// to show how objects can be saved
 			rt_hashOps.put(KEY_HASH_ALL_USERS, key, user);
+			*/
 
 		}
 
