@@ -2,7 +2,10 @@ package de.hska.lkit.blogux.model;
 
 import java.util.Set;
 import java.io.Serializable;
-
+/**
+ * @author atimchenko
+ *
+ */
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -21,7 +24,6 @@ public class User implements Serializable {
   public User() {
 
   }
-
 
   public User(String username, String password) {
     this.username = username;

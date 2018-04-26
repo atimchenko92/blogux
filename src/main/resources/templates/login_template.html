@@ -7,32 +7,35 @@
     <meta name="author" content="">
     <link rel="icon" th:href="@{/images/fly.png}">
 
-    <title>blogux:: micro-blogging platform</title>
+    <title>blogux:: login</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-beta/css/bootstrap.min.css}"/>
 
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/offcanvas.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/signup.css}" />
 
   </head>
 
-  <body class="bg-light">
-    <div class=header_container>
-      <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-    </div>
+  <body class="text-center">
 
-    <div class=container>
-      <!--/*/ <th:block th:include="fragments/newpost :: newpost"></th:block> /*/-->
-      <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
+  <th:block th:switch="${login.islogin}">
+    <div th:case="true">
+      <div class=login_cont>
+      <!--/*/ <th:block th:include="fragments/login_form :: login_form"></th:block> /*/-->
+      </div>
     </div>
+    <div th:case="false">
+      <div class=signup_cont>
+      <!--/*/ <th:block th:include="fragments/signup_form :: signup_form"></th:block> /*/-->
+      </div>
+    </div>
+  </th:block>
 
     <!-- Bootstrap core JavaScript
       ================================================== -->
   	<!-- Placed at the end of the document so the pages load faster -->
-  	<script th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
-    <script th:src="@{/webjars/popper.js/1.13.0-next/dist/umd/popper.min.js}"></script>
-  	<script th:src="@{/webjars/bootstrap/4.0.0-beta/js/bootstrap.min.js}"></script>
-
-  </body>
+    <script th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.0.0-beta/js/bootstrap.min.js}"></script>
+</body>
 </html>

@@ -5,6 +5,10 @@ import java.time.LocalDateTime;
 
 import java.io.Serializable;
 
+/**
+ * @author atimchenko
+ *
+ */
 public class Post implements Serializable{
 
   private static final long serialVersionUID = 1L;

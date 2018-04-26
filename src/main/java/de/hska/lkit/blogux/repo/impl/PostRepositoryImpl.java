@@ -26,10 +26,6 @@ import de.hska.lkit.blogux.repo.PostRepository;
  * @author knad0001
  *
  */
-/**
- * @author knad0001
- *
- */
 @Repository
 public class PostRepositoryImpl implements PostRepository {
 

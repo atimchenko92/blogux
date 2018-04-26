@@ -18,7 +18,7 @@ import de.hska.lkit.blogux.places.*;
  */
 @Controller
 public class UserController {
-
+/*
 	private final UserRepository userRepository;
 
 	@Autowired
@@ -26,7 +26,7 @@ public class UserController {
 		super();
 		this.userRepository = userRepository;
 	}
-/*
+
 	@RequestMapping(value = "/signup",  method = RequestMethod.GET)
 	public String showSignup(@ModelAttribute User newUser) {
 		return "signup";

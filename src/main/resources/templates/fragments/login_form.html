@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="login_form">
+  <form class="form-signin" th:object="${login}"
+    method="post" th:action="@{/login}" >
+    <img class="mb-4" th:src="@{/images/fly.png}" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">blogux:: microblog plattform</h1>
+    <input type="text" class="form-control"
+      placeholder="Username" required="" th:field="*{name}">
+    <div class="checkbox mb-3"></div>
+    <input type="password" class="form-control"
+     placeholder="Enter password" th:field="*{pwd}" required="">
+    <div class="checkbox mb-3">
+
+    </div>
+    <button id='btnLog' name="action" value="login"  class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+    <button id='btnSgn' name="action" value="toSignup" class="btn btn-lg btn-primary btn-block" type="submit">Signup</button>
+    <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+  </form>
+</div>
+</html>
