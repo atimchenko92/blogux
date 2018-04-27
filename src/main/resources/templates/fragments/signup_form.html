@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="signup_form">
-  <form class="form-signin" action="#" th:object="${login}"
+  <form id="signupForm" class="form-signin" action="#" th:object="${login}"
     method="post" th:action="@{/login}" >
     <img class="mb-4" th:src="@{/images/fly.png}" alt="" width="72" height="72">
     <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
@@ -9,11 +9,14 @@
       placeholder="Username" required="" th:field="*{name}">
     <div class="checkbox mb-3"></div>
     <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control"
+    <input id="inputPassword" type="password"  class="form-control"
      placeholder="Enter new password" th:field="*{pwd}" required="">
-   <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" th:field="*{pwdConfirm}"
+   <label for="inputPassword2" class="sr-only">Password</label>
+    <input id="inputPassword2" type="password" th:field="*{pwdConfirm}"
       class="form-control" placeholder="Repeat password" required="">
+    <div class="alert alert-danger" role="alert">
+      <strong>Oh snap!</strong> The passwords don't match
+    </div>
     <div class="checkbox mb-3">
 
     </div>
@@ -21,5 +24,23 @@
     <button th:onclick="|window.location.href='@{/login}'|" class="btn btn-lg btn-warning btn-block" type="button">Back</button>
     <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
   </form>
+
+  <!-- Password validation script -->
+  <script>
+    $(document).ready(function() {
+      $( ".alert" ).hide();
+    });
+
+    $( "#signupForm" ).on("submit", function() {
+      var val1 = $( "#inputPassword" ).val();
+      var val2 = $( "#inputPassword2" ).val();
+      if ( val1 != val2 )
+      {
+        $( ".alert" ).show().fadeOut( 4000 );
+        return false;
+      }
+      return true;
+    });
+  </script>
 </div>
 </html>

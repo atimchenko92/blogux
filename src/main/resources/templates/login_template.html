@@ -14,27 +14,25 @@
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/signup.css}" />
+
+    <!-- Core JavaScript -->
+    <script th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.13.0-next/dist/umd/popper.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.0.0-beta/js/bootstrap.min.js}"></script>
   </head>
 
   <body class="text-center">
-
-  <th:block th:switch="${login.islogin}">
-    <div th:case="true">
-      <div class=login_cont>
-      <!--/*/ <th:block th:include="fragments/login_form :: login_form"></th:block> /*/-->
+    <th:block th:switch="${login.islogin}">
+      <div th:case="true">
+        <div class=login_cont>
+        <!--/*/ <th:block th:include="fragments/login_form :: login_form"></th:block> /*/-->
+        </div>
       </div>
-    </div>
-    <div th:case="false">
-      <div class=signup_cont>
-      <!--/*/ <th:block th:include="fragments/signup_form :: signup_form"></th:block> /*/-->
+      <div th:case="false">
+        <div class=signup_cont>
+        <!--/*/ <th:block th:include="fragments/signup_form :: signup_form"></th:block> /*/-->
+        </div>
       </div>
-    </div>
-  </th:block>
-
-    <!-- Bootstrap core JavaScript
-      ================================================== -->
-  	<!-- Placed at the end of the document so the pages load faster -->
-    <script th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
-    <script th:src="@{/webjars/bootstrap/4.0.0-beta/js/bootstrap.min.js}"></script>
-</body>
+    </th:block>
+  </body>
 </html>
