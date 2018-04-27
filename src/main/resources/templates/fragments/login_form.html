@@ -13,8 +13,8 @@
     <div class="checkbox mb-3">
 
     </div>
-    <button id='btnLog' name="action" value="login"  class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-    <button id='btnSgn' name="action" value="toSignup" class="btn btn-lg btn-primary btn-block" type="submit">Signup</button>
+    <button name="action" value="login"  class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+    <a th:href="@{/login(action='toSignup')}">New to blogux? </a>
     <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
   </form>
 </div>

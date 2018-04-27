@@ -26,31 +26,31 @@ public class LoginController {
 	}
 
 	/**
-	* Show login template
+	* Show signup template
 	**/
-	@RequestMapping(value = "/login",  method = RequestMethod.GET)
-	public String showLogin(@ModelAttribute Login login, Model model) {
+	@RequestMapping(value = "/login",  method = RequestMethod.GET, params="action=toSignup")
+	public String navigateToSignup(@ModelAttribute Login login, Model model) {
 		model.addAttribute("login", login != null ? login : new Login());
+		login.setIslogin(false);
 		return "login_template";
 	}
 
 	/**
-	* Navigate to login formular
+	* Show login template
 	**/
-	@RequestMapping(value = "/login",  method = RequestMethod.POST, params="action=toLogin")
-	public String toLogin(@ModelAttribute Login login, Model model) {
+	@RequestMapping(value = "/login",  method = RequestMethod.GET, params="action=toLogin")
+	public String navigateToLogin(@ModelAttribute Login login, Model model) {
 		model.addAttribute("login", login != null ? login : new Login());
 		login.setIslogin(true);
 		return "login_template";
 	}
 
 	/**
-	* Navigate to sign up formular
+	* Show login template
 	**/
-	@RequestMapping(value = "/login",  method = RequestMethod.POST, params="action=toSignup")
-	public String toSignup(@ModelAttribute Login login, Model model) {
+	@RequestMapping(value = "/login",  method = RequestMethod.GET)
+	public String showLogin(@ModelAttribute Login login, Model model) {
 		model.addAttribute("login", login != null ? login : new Login());
-		login.setIslogin(false);
 		return "login_template";
 	}
 
@@ -71,6 +71,7 @@ public class LoginController {
 	@RequestMapping(value = "/login",  method = RequestMethod.POST, params="action=login")
 	public String logIn(@ModelAttribute Login login, Model model) {
 		model.addAttribute("login", login != null ? login : new Login());
+		//TODO: Check if user is registered
 	  //TODO: Get Cookie, register session
 		login.setIslogin(false);
 		return "redirect:/";
