@@ -1,5 +1,10 @@
 package de.hska.lkit.blogux.controller;
 
+import java.util.concurrent.TimeUnit;
+import de.hska.lkit.blogux.repo.SessionRepository;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
+import java.time.Duration;
 import org.springframework.ui.Model;
 import de.hska.lkit.blogux.places.Login;
 import de.hska.lkit.blogux.model.User;
@@ -16,13 +21,17 @@ import de.hska.lkit.blogux.repo.UserRepository;
  */
 @Controller
 public class LoginController {
-
 	private final UserRepository userRepository;
 
+	private final SessionRepository sessionRepository;
+
+	private static final Duration TIMEOUT = Duration.ofMinutes(15);
+
 	@Autowired
-	public LoginController(UserRepository userRepository) {
+	public LoginController(UserRepository userRepository, SessionRepository sessionRepository) {
 		super();
 		this.userRepository = userRepository;
+		this.sessionRepository = sessionRepository;
 	}
 
 	/**
@@ -61,7 +70,7 @@ public class LoginController {
 	public String signUp(@ModelAttribute Login login, Model model) {
 		model.addAttribute("login", login != null ? login : new Login());
 		login.setIslogin(true);
-		//TODO: Validation checks (pwd == pwdConfirm)
+		//TODO: Validation checks (if user already exists)
 		userRepository.createUser(new User(login.getName(), login.getPwd()));
 		return "login_template";
 	}
@@ -69,11 +78,19 @@ public class LoginController {
 	* Perform login
 	**/
 	@RequestMapping(value = "/login",  method = RequestMethod.POST, params="action=login")
-	public String logIn(@ModelAttribute Login login, Model model) {
-		model.addAttribute("login", login != null ? login : new Login());
-		//TODO: Check if user is registered
-	  //TODO: Get Cookie, register session
-		login.setIslogin(false);
-		return "redirect:/";
+	public String logIn(@ModelAttribute Login login, HttpServletResponse response, Model model) {
+		if(sessionRepository.checkAuth(login.getName(), login.getPwd()))
+		{
+			String token = sessionRepository.addAuthToken(login.getName(), TIMEOUT.getSeconds(), TimeUnit.SECONDS);
+			Cookie cookie = new Cookie("auth", token);
+			response.addCookie(cookie);
+			//TODO: get user information
+			model.addAttribute("userinfo", login.getName());
+			return "redirect:/";
+		}
+		model.addAttribute("login", new Login());
+		return "login";
 	}
+
+
 }
