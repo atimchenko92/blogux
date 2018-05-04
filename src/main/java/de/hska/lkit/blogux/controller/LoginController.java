@@ -1,5 +1,8 @@
 package de.hska.lkit.blogux.controller;
 
+import org.springframework.web.servlet.view.RedirectView;
+import java.util.Map;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import de.hska.lkit.blogux.session.BloguxSecurity;
 import java.util.concurrent.TimeUnit;
 import de.hska.lkit.blogux.repo.SessionRepository;
@@ -79,14 +82,13 @@ public class LoginController {
 	* Perform login
 	**/
 	@RequestMapping(value = "/login",  method = RequestMethod.POST, params="action=login")
-	public String logIn(@ModelAttribute Login login, HttpServletResponse response, Model model) {
+	public String logIn(@ModelAttribute Login login, HttpServletResponse response, Model model, RedirectAttributes rAttr) {
 		if(sessionRepository.checkAuth(login.getName(), login.getPwd())){
 			String token = sessionRepository.addAuthTokens(login.getName(), TIMEOUT.getSeconds(), TimeUnit.MINUTES);
 			Cookie cookie = new Cookie("auth", token);
 			response.addCookie(cookie);
 			//TODO: get user information
-			model.addAttribute("user", new User(login.getName(), login.getPwd()));
-			System.out.println("Login name: "+login.getName());
+			rAttr.addFlashAttribute("user", new User(login.getName(), login.getPwd()));
 			return "redirect:/";
 		}
 		model.addAttribute("login", new Login());
@@ -97,13 +99,14 @@ public class LoginController {
 	*	Perform logout
 	**/
 	@RequestMapping(value = "/logout",  method = RequestMethod.GET)
-	public String logOut(@ModelAttribute User user) {
-		System.out.println("Usr name:"+user.getUsername());
+	public String logOut(@ModelAttribute User user){
+		System.out.println("Logout Usr name:"+user.getUsername());
 		if(BloguxSecurity.isUserSignedIn(user.getUsername())){
 			sessionRepository.deleteAuthTokens(user.getUsername());
 		}
 		return "redirect:/login";
 	}
+
 
 
 }

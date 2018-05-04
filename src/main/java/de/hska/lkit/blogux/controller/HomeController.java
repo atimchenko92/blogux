@@ -1,5 +1,9 @@
 package de.hska.lkit.blogux.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import de.hska.lkit.blogux.repo.SessionRepository;
+import de.hska.lkit.blogux.session.BloguxSecurity;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 import de.hska.lkit.blogux.places.Home;
 import de.hska.lkit.blogux.model.User;
@@ -17,9 +21,18 @@ import de.hska.lkit.blogux.repo.UserRepository;
 @Controller
 public class HomeController {
 
-  @RequestMapping(value = "/")
-	public String showHome(@ModelAttribute Home home, Model model) {
-		model.addAttribute("home", home != null ? home : new Home());
+  private final SessionRepository sessionRepository;
+
+  @Autowired
+  public HomeController(SessionRepository sessionRepository) {
+    super();
+    this.sessionRepository = sessionRepository;
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET)
+	public String showHome(@ModelAttribute User user, Model model) {
+		model.addAttribute("user", user != null ? user : new User());
+    System.out.println("Home-get:Username "+user.getUsername());
 		return "main_template";
 	}
 
