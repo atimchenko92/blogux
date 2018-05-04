@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.controller;
 
+import de.hska.lkit.blogux.session.BloguxSecurity;
 import java.util.concurrent.TimeUnit;
 import de.hska.lkit.blogux.repo.SessionRepository;
 import javax.servlet.http.HttpServletResponse;
@@ -71,7 +72,7 @@ public class LoginController {
 		model.addAttribute("login", login != null ? login : new Login());
 		login.setIslogin(true);
 		//TODO: Validation checks (if user already exists)
-		userRepository.createUser(new User(login.getName(), login.getPwd()));
+		userRepository.createUser(login);
 		return "login_template";
 	}
 	/**
@@ -79,17 +80,29 @@ public class LoginController {
 	**/
 	@RequestMapping(value = "/login",  method = RequestMethod.POST, params="action=login")
 	public String logIn(@ModelAttribute Login login, HttpServletResponse response, Model model) {
-		if(sessionRepository.checkAuth(login.getName(), login.getPwd()))
-		{
-			String token = sessionRepository.addAuthToken(login.getName(), TIMEOUT.getSeconds(), TimeUnit.SECONDS);
+		if(sessionRepository.checkAuth(login.getName(), login.getPwd())){
+			String token = sessionRepository.addAuthTokens(login.getName(), TIMEOUT.getSeconds(), TimeUnit.MINUTES);
 			Cookie cookie = new Cookie("auth", token);
 			response.addCookie(cookie);
 			//TODO: get user information
-			model.addAttribute("userinfo", login.getName());
+			model.addAttribute("user", new User(login.getName(), login.getPwd()));
+			System.out.println("Login name: "+login.getName());
 			return "redirect:/";
 		}
 		model.addAttribute("login", new Login());
-		return "login";
+		return "redirect:/login";
+	}
+
+	/**
+	*	Perform logout
+	**/
+	@RequestMapping(value = "/logout",  method = RequestMethod.GET)
+	public String logOut(@ModelAttribute User user) {
+		System.out.println("Usr name:"+user.getUsername());
+		if(BloguxSecurity.isUserSignedIn(user.getUsername())){
+			sessionRepository.deleteAuthTokens(user.getUsername());
+		}
+		return "redirect:/login";
 	}
 
 

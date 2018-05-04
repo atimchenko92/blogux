@@ -6,13 +6,12 @@ import java.io.Serializable;
  * @author atimchenko
  *
  */
-public class User implements Serializable {
+public class User{ //mplements Serializable {
 
-  private static final long serialVersionUID = 1L;
+  //private static final long serialVersionUID = 1L;
 
   private String id;
   private String username;
-  private String picture;
   private String password;
 
   private String firstname;
@@ -62,20 +61,8 @@ public class User implements Serializable {
     this.lastname = lastname;
   }
 
-  public String getPassword() {
-    return password;
-  }
-
   public void setPassword(String password) {
     this.password = password;
-  }
-
-  public String getPicture() {
-    return picture;
-  }
-
-  public void setPicture(String picture) {
-    this.picture = picture;
   }
 
   public Set<String> getFollowers() {

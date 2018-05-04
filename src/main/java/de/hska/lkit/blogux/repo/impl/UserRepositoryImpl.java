@@ -1,7 +1,7 @@
 package de.hska.lkit.blogux.repo.impl;
 
+import de.hska.lkit.blogux.places.Login;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -80,21 +80,23 @@ public class UserRepositoryImpl implements UserRepository {
 		}
 
 		@Override
-		public void createUser(User user) {
+		public void createUser(Login formular) {
 			// generate a unique id
 			String id = String.valueOf(userid.incrementAndGet());
-			user.setId(id);
+			String key = KEY_PREFIX_USER + formular.getName();
 
-			String key = KEY_PREFIX_USER + user.getUsername();
 			srt_hashOps.put(key, "id", id);
-			srt_hashOps.put(key, "username", user.getUsername());
-			srt_hashOps.put(key, "password", user.getPassword());
+			srt_hashOps.put(key, "username", formular.getName());
+			srt_hashOps.put(key, "password", formular.getPwd());
 			// the key for a new user is added to the set for all usernames
-			srt_setOps.add(KEY_SET_ALL_USERNAMES, user.getUsername());
+			srt_setOps.add(KEY_SET_ALL_USERNAMES, formular.getName());
 			// the key for a new user is added to the sorted set for all usernames
-			srt_zSetOps.add(KEY_ZSET_ALL_USERNAMES, user.getUsername(), 0);
-			// to show how objects can be saved
-			rt_hashOps.put(KEY_HASH_ALL_USERS, key, user);
+			srt_zSetOps.add(KEY_ZSET_ALL_USERNAMES, formular.getName(), 0);
+
+			//Creating new user
+			User newUser = new User(formular.getName(),formular.getPwd());
+			newUser.setId(id);
+			rt_hashOps.put(KEY_HASH_ALL_USERS, key, newUser);
 		}
 
 

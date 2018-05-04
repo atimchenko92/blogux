@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.session;
 
+import java.util.logging.Logger;
 import org.springframework.util.ObjectUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -12,9 +13,12 @@ public class BloguxCookieInterceptor extends HandlerInterceptorAdapter{
   @Autowired
   private StringRedisTemplate template;
 
+  private static final Logger logger = Logger.getLogger("coockie-interceptor");
+
   @Override
   public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
     Cookie[] cookies = req.getCookies();
+    logger.info("INSIDE PREHANDLE");
 
     if (!ObjectUtils.isEmpty(cookies))
       for (Cookie cookie : cookies)
@@ -30,7 +34,7 @@ public class BloguxCookieInterceptor extends HandlerInterceptorAdapter{
         }
         return true;
     }
-// clean up SimpleSession State in the end (skipped here)
+//TODO: clean up SimpleSession State in the end (skipped here)
 
 
 

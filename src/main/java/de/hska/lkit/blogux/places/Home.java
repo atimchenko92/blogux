@@ -21,10 +21,6 @@ public class Home {
     return currentUser.getUsername();
   }
 
-  public String getPicture() {
-    return currentUser.getPicture();
-  }
-
   public String getFirstName() {
     return currentUser.getUsername();
   }
