@@ -99,11 +99,12 @@ public class LoginController {
 	*	Perform logout
 	**/
 	@RequestMapping(value = "/logout",  method = RequestMethod.GET)
-	public String logOut(@ModelAttribute User user){
-		System.out.println("Logout Usr name:"+user.getUsername());
-		if(BloguxSecurity.isUserSignedIn(user.getUsername())){
-			sessionRepository.deleteAuthTokens(user.getUsername());
-		}
+	public String logOut(){
+//		if(BloguxSecurity.isSignedIn()){
+			String name = BloguxSecurity.getName();
+			System.out.println("LOGOUT: "+name);
+			sessionRepository.deleteAuthTokens(name);
+//		}
 		return "redirect:/login";
 	}
 

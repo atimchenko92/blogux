@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.repo.impl;
 
+import org.springframework.data.redis.core.ValueOperations;
 import de.hska.lkit.blogux.places.Login;
 import java.util.Map;
 
@@ -55,6 +56,8 @@ public class UserRepositoryImpl implements UserRepository {
 	 */
 	private ZSetOperations<String, String> srt_zSetOps;
 
+	private ValueOperations<String,String> val_Opts;
+
 
 
 	/**
@@ -77,6 +80,7 @@ public class UserRepositoryImpl implements UserRepository {
 			srt_hashOps = stringRedisTemplate.opsForHash();
 			srt_setOps = stringRedisTemplate.opsForSet();
 			srt_zSetOps = stringRedisTemplate.opsForZSet();
+			val_Opts = stringRedisTemplate.opsForValue();
 		}
 
 		@Override
@@ -92,6 +96,8 @@ public class UserRepositoryImpl implements UserRepository {
 			srt_setOps.add(KEY_SET_ALL_USERNAMES, formular.getName());
 			// the key for a new user is added to the sorted set for all usernames
 			srt_zSetOps.add(KEY_ZSET_ALL_USERNAMES, formular.getName(), 0);
+
+			val_Opts.set("uid:"+id+":name", formular.getName());
 
 			//Creating new user
 			User newUser = new User(formular.getName(),formular.getPwd());
