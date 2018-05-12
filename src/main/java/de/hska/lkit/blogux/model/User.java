@@ -11,6 +11,7 @@ public class User implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String id;
+  private String sessionToken;
   private String username;
   private String password;
 
@@ -27,6 +28,14 @@ public class User implements Serializable {
   public User(String username, String password) {
     this.username = username;
     this.password = password;
+  }
+
+  public String getSessionToken(){
+    return sessionToken;
+  }
+
+  public void setSessionToken(String token){
+    this.sessionToken = token;
   }
 
   public String getId() {

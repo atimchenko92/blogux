@@ -1,54 +1,53 @@
 package de.hska.lkit.blogux.session;
 
-import org.springframework.core.NamedThreadLocal;
+import org.springframework.beans.factory.annotation.Autowired;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
+import de.hska.lkit.blogux.model.User;
+import org.springframework.util.ObjectUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
-public abstract class BloguxSecurity {
+public class BloguxSecurity {
 
-  private static final ThreadLocal<UserInfo> user = new NamedThreadLocal<UserInfo>("blogux-id");
+  public static void createCookie(String name, HttpServletResponse res) {
 
-  private static class UserInfo {
-    String name;
-    String uid;
   }
 
-  public static void setUser(String name, String uid) {
-    System.out.printf("In set user: name=%s, uid=%s\n", name, uid);
+  public static void removeCookie(String name){
 
-    UserInfo userInfo = new UserInfo();
-    userInfo.name = name;
-    userInfo.uid = uid;
-    user.set(userInfo);
-    System.out.println("check");
-    System.out.println(user.get().name);
   }
 
-  public static boolean isSignedIn() {
-    UserInfo userInfo = user.get();
-    if ( userInfo != null) {
-      return true;
-    }
-    return false;
+  public static void refreshCookie(){
+
   }
 
-  public static boolean isUserSignedIn(String name) {
-    UserInfo userInfo = user.get();
-    return userInfo != null && userInfo.name.equals(name);
+  public static User getUserByCookie(HttpServletRequest req, StringRedisTemplate template){
+    System.out.println("Get user by cookie");
+    Cookie[] cookies = req.getCookies();
+    System.out.println("Length "+cookies.length);
+    User currentUser = null;
+    if (!ObjectUtils.isEmpty(cookies))
+      for (Cookie cookie : cookies)
+        if (cookie.getName().equals("auth")) {
+          String auth = cookie.getValue();
+          System.out.println("Auth:"+auth);
+          if (auth != null) {
+            String uid = template.opsForValue().get("auth:" + auth + ":uid");
+            System.out.println("UID:"+uid);
+            if (uid != null) {
+              String name = template.opsForValue().get("uid:" + uid + ":name");
+              //TODO change it with normal user
+              currentUser = new User();
+              currentUser.setId(uid);
+              currentUser.setUsername(name);
+              currentUser.setSessionToken(auth);
+              return currentUser;
+            }
+          }
+        }
+        return currentUser;
   }
 
-  public static String getName() {
-
-    System.out.println("GETNAME");
-    System.out.println("get nam"+user.get().name);
-    UserInfo userInfo = user.get();
-    System.out.println("userinf"+userInfo.name);
-
-
-    return userInfo.name;
-  }
-
-  public static String getUid() {
-    UserInfo userInfo = user.get();
-    return userInfo.uid;
-  }
 
 }

@@ -35,12 +35,13 @@ public class SessionRepositoryImpl implements SessionRepository{
   }
 
   @Override
-  public void deleteAuthTokens(String name){
+  public void deleteAuthTokens(String uid, String auth){
     //String uid = template.opsForValue().get("uname:" + name + ":uid");
-    String uid = (String)template.opsForHash().get("user:"+name, "id");
+    //  String uid = (String)template.opsForHash().get("user:"+name, "id");
     String authKey = "uid:" + uid + ":auth";
-    String auth = (String) template.boundHashOps(authKey).get("auth");
-    List<String> keysToDelete = Arrays.asList(authKey, "auth:"+auth+":uid");
+    String authUID = "auth:"+auth+":uid";
+    //String auth = (String) template.boundHashOps(authKey).get("auth");
+    List<String> keysToDelete = Arrays.asList(authKey, authUID);
     template.delete(keysToDelete);
   }
 }

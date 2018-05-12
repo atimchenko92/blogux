@@ -1,5 +1,7 @@
 package de.hska.lkit.blogux.controller;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.servlet.view.RedirectView;
 import java.util.Map;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -29,13 +31,16 @@ public class LoginController {
 
 	private final SessionRepository sessionRepository;
 
+	private StringRedisTemplate template;
+
 	private static final Duration TIMEOUT = Duration.ofMinutes(15);
 
 	@Autowired
-	public LoginController(UserRepository userRepository, SessionRepository sessionRepository) {
+	public LoginController(UserRepository userRepository, SessionRepository sessionRepository, StringRedisTemplate template) {
 		super();
 		this.userRepository = userRepository;
 		this.sessionRepository = sessionRepository;
+		this.template = template;
 	}
 
 	/**
@@ -99,12 +104,11 @@ public class LoginController {
 	*	Perform logout
 	**/
 	@RequestMapping(value = "/logout",  method = RequestMethod.GET)
-	public String logOut(){
-//		if(BloguxSecurity.isSignedIn()){
-			String name = BloguxSecurity.getName();
-			System.out.println("LOGOUT: "+name);
-			sessionRepository.deleteAuthTokens(name);
-//		}
+	public String logOut(HttpServletRequest req){
+	  System.out.println("in logout");
+		User user = BloguxSecurity.getUserByCookie(req, template);
+		System.out.println("LOGOUT: "+user.getUsername());
+		sessionRepository.deleteAuthTokens(user.getId(), user.getSessionToken());
 		return "redirect:/login";
 	}
 
