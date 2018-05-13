@@ -14,6 +14,7 @@ import java.time.Duration;
 import org.springframework.ui.Model;
 import de.hska.lkit.blogux.places.Login;
 import de.hska.lkit.blogux.model.User;
+import de.hska.lkit.blogux.places.Home;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,7 +94,8 @@ public class LoginController {
 			Cookie cookie = new Cookie("auth", token);
 			response.addCookie(cookie);
 			//TODO: get user information
-			rAttr.addFlashAttribute("user", new User(login.getName(), login.getPwd()));
+//			rAttr.addFlashAttribute("user", new User(login.getName(), login.getPwd()));
+//			rAttr.addFlashAttribute("home", new Home());
 			return "redirect:/";
 		}
 		model.addAttribute("login", new Login());

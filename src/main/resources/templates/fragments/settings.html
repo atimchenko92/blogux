@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="settings">
+  <form class="form-signin" th:object="${user}"
+    method="post" th:action="@{/}" >
+    <input type="text" class="form-control"
+      placeholder="First name" th:field="*{firstname}">
+    <div class="checkbox mb-3"></div>
+    <input type="text" class="form-control"
+     placeholder="Last name" th:field="*{lastname}">
+    <div class="checkbox mb-3">
+
+    </div>
+    <button name="action" value="saveSettings"
+     class="btn btn-lg btn-primary btn-block" type="submit">Save account settings</button>
+  </form>
+</div>
+</html>

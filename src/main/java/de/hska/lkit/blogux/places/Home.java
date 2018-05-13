@@ -6,15 +6,16 @@ import de.hska.lkit.blogux.model.User;
  *
  */
 public class Home {
-  private String activeTab;
+  private String activetab;
   private User currentUser;
 
   public Home() {
+    this.activetab = "timeline-my";
   }
 
   public Home(User currentUser) {
     this.currentUser = currentUser;
-    this.activeTab = "test";
+    this.activetab = "timeline-my";
   }
 
   public String getUserName() {
@@ -25,11 +26,11 @@ public class Home {
     return currentUser.getUsername();
   }
 
-  public void setActiveTab(String activeTab){
-    this.activeTab = activeTab;
+  public void setActivetab(String activetab){
+    this.activetab = activetab;
   }
 
-  public String getActiveTab(){
-    return activeTab;
+  public String getActivetab(){
+    return activetab;
   }
 }

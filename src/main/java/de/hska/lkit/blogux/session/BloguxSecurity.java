@@ -25,7 +25,6 @@ public class BloguxSecurity {
   public static User getUserByCookie(HttpServletRequest req, StringRedisTemplate template){
     System.out.println("Get user by cookie");
     Cookie[] cookies = req.getCookies();
-    System.out.println("Length "+cookies.length);
     User currentUser = null;
     if (!ObjectUtils.isEmpty(cookies))
       for (Cookie cookie : cookies)
