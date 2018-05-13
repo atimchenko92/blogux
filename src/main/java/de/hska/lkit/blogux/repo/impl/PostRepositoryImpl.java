@@ -1,17 +1,12 @@
 package de.hska.lkit.blogux.repo.impl;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisZSetCommands.Range;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;

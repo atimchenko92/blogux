@@ -1,5 +1,8 @@
 package de.hska.lkit.blogux.repo.impl;
 
+import org.springframework.util.ObjectUtils;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
 import org.springframework.data.redis.core.ValueOperations;
 import de.hska.lkit.blogux.places.Login;
@@ -108,9 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
 	public void saveUser(User user) {
 		String key = KEY_PREFIX_USER + user.getUsername();
 		User oldUser = null;
-		System.out.println("saving user:" + user.getUsername());
 		oldUser = getUser(user.getUsername());
-		System.out.println("old user:" + oldUser.getFirstname());
 		//TODO If pwd change
 		oldUser.setFirstname(user.getFirstname());
 		oldUser.setLastname(user.getLastname());
@@ -139,7 +140,6 @@ public class UserRepositoryImpl implements UserRepository {
 			user.setLastname(srt_hashOps.get(key, "lastname"));
 			user.setUsername(srt_hashOps.get(key, "username"));
 			user.setPassword(srt_hashOps.get(key, "password"));
-			System.out.println("before get follows and followers");
 			user.setFollows(getFollows(username));
 			user.setFollowers(getFollowers(username));
 		} else
@@ -160,6 +160,31 @@ public class UserRepositoryImpl implements UserRepository {
 			srt_setOps.add(inspectedFolowers, currentUser.getUsername());
 		}
 		//TODO: rebuild timeline
+	}
+
+	@Override
+	public User getUserByCookie(HttpServletRequest req){
+		User currentUser = null;
+		System.out.println("Get user by cookie");
+		Cookie[] cookies = req.getCookies();
+		if (!ObjectUtils.isEmpty(cookies))
+			for (Cookie cookie : cookies)
+				if (cookie.getName().equals("auth")) {
+					String auth = cookie.getValue();
+					System.out.println("Auth:"+auth);
+					if (auth != null) {
+						String uid = stringRedisTemplate.opsForValue().get("auth:" + auth + ":uid");
+						System.out.println("UID:"+uid);
+						if (uid != null) {
+							String name = stringRedisTemplate.opsForValue().get("uid:" + uid + ":name");
+							currentUser = getUser(name);
+							currentUser.setSessionToken(auth);
+							return currentUser;
+						}
+					}
+				}
+
+		return currentUser;
 	}
 
 	@Override

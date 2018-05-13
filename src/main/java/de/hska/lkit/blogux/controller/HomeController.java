@@ -1,11 +1,7 @@
 package de.hska.lkit.blogux.controller;
 
 import de.hska.lkit.blogux.repo.PostRepository;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import javax.servlet.http.HttpServletRequest;
-import de.hska.lkit.blogux.repo.SessionRepository;
-import de.hska.lkit.blogux.session.BloguxSecurity;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 import de.hska.lkit.blogux.places.Home;
 import de.hska.lkit.blogux.model.User;
@@ -24,67 +20,57 @@ import de.hska.lkit.blogux.repo.UserRepository;
 @Controller
 public class HomeController {
 
-  private final SessionRepository sessionRepository;
   private final UserRepository userRepository;
   private final PostRepository postRepository;
-  private StringRedisTemplate template;
 
   @Autowired
-  public HomeController(SessionRepository sessionRepository, UserRepository userRepository, PostRepository postRepository, StringRedisTemplate template) {
+  public HomeController(UserRepository userRepository, PostRepository postRepository) {
     super();
-    this.sessionRepository = sessionRepository;
     this.userRepository = userRepository;
     this.postRepository = postRepository;
-    this.template = template;
   }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showHome( @ModelAttribute Home home, @ModelAttribute Post post, Model model, HttpServletRequest req) {
-    User usercook = BloguxSecurity.getUserByCookie(req, template);
-    User user = userRepository.getUser(usercook.getUsername());
-
-		model.addAttribute("user", user != null ? user : new User());
+    User currentUser = (User)req.getAttribute("currentUser");
+    model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     model.addAttribute("post", post != null ? post : new Post());
-    System.out.println("Home-get:Username "+user.getUsername());
+
 		return "main_template";
 	}
 
   @RequestMapping(value = "/", method = RequestMethod.GET, params="action=toSettings")
   public String showSettings(@ModelAttribute Home home, Model model, HttpServletRequest req) {
-    User usercook = BloguxSecurity.getUserByCookie(req, template);
-    User user = userRepository.getUser(usercook.getUsername());
-
-    model.addAttribute("user", user != null ? user : new User());
+    User currentUser = (User)req.getAttribute("currentUser");
+    model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     home.setActivetab("settings");
-    System.out.println("Home-to settings");
+
     return "main_template";
   }
 
   @RequestMapping(value = "/", method = RequestMethod.POST, params="action=saveSettings")
   public String saveSettings(@ModelAttribute User user, @ModelAttribute Home home, Model model, HttpServletRequest req) {
-    model.addAttribute("user", user != null ? user : new User());
-    model.addAttribute("home", home != null ? home : new Home());
-    home.setActivetab("timeline-my");
-
-    User usercook = BloguxSecurity.getUserByCookie(req, template);
-    User currentUser = userRepository.getUser(usercook.getUsername());
+    User currentUser = (User)req.getAttribute("currentUser");
 
     currentUser.setFirstname(user.getFirstname());
     currentUser.setLastname(user.getLastname());
-    System.out.println("Home-save settings: "+currentUser.getFirstname()+currentUser.getLastname());
     userRepository.saveUser(currentUser);
+
+    model.addAttribute("user", currentUser);
+    model.addAttribute("home", home != null ? home : new Home());
+    home.setActivetab("timeline-my");
+
     return "redirect:/";
   }
 
   @RequestMapping(value = "/", method = RequestMethod.POST, params="action=sendPost")
   public String sendPost(@ModelAttribute Post post, @ModelAttribute Home home, Model model, HttpServletRequest req) {
-    System.out.println("CHECK: post-send method");
+    User currentUser = (User)req.getAttribute("currentUser");
     model.addAttribute("post", post != null ? post : new Post());
-    Post newPost = new Post(BloguxSecurity.getUserByCookie(req, template), post.getText());
-    System.out.println("Post repository author: " + newPost.getAuthor().getId() + " Post: " + newPost.getText());
-    postRepository.savePost(newPost);
+    postRepository.savePost(new Post(currentUser, post.getText()));
+    
     return "redirect:/";
   }
 

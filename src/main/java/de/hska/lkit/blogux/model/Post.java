@@ -1,8 +1,5 @@
 package de.hska.lkit.blogux.model;
 
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 

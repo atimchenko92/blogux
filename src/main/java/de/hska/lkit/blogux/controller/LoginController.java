@@ -1,11 +1,7 @@
 package de.hska.lkit.blogux.controller;
 
-import org.springframework.data.redis.core.StringRedisTemplate;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.web.servlet.view.RedirectView;
-import java.util.Map;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import de.hska.lkit.blogux.session.BloguxSecurity;
 import java.util.concurrent.TimeUnit;
 import de.hska.lkit.blogux.repo.SessionRepository;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +10,6 @@ import java.time.Duration;
 import org.springframework.ui.Model;
 import de.hska.lkit.blogux.places.Login;
 import de.hska.lkit.blogux.model.User;
-import de.hska.lkit.blogux.places.Home;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,19 +24,14 @@ import de.hska.lkit.blogux.repo.UserRepository;
 @Controller
 public class LoginController {
 	private final UserRepository userRepository;
-
 	private final SessionRepository sessionRepository;
-
-	private StringRedisTemplate template;
-
 	private static final Duration TIMEOUT = Duration.ofMinutes(15);
 
 	@Autowired
-	public LoginController(UserRepository userRepository, SessionRepository sessionRepository, StringRedisTemplate template) {
+	public LoginController(UserRepository userRepository, SessionRepository sessionRepository) {
 		super();
 		this.userRepository = userRepository;
 		this.sessionRepository = sessionRepository;
-		this.template = template;
 	}
 
 	/**
@@ -51,6 +41,7 @@ public class LoginController {
 	public String navigateToSignup(@ModelAttribute Login login, Model model) {
 		model.addAttribute("login", login != null ? login : new Login());
 		login.setIslogin(false);
+		
 		return "login_template";
 	}
 
@@ -61,6 +52,7 @@ public class LoginController {
 	public String navigateToLogin(@ModelAttribute Login login, Model model) {
 		model.addAttribute("login", login != null ? login : new Login());
 		login.setIslogin(true);
+
 		return "login_template";
 	}
 
@@ -70,6 +62,7 @@ public class LoginController {
 	@RequestMapping(value = "/login",  method = RequestMethod.GET)
 	public String showLogin(@ModelAttribute Login login, Model model) {
 		model.addAttribute("login", login != null ? login : new Login());
+
 		return "login_template";
 	}
 
@@ -82,6 +75,7 @@ public class LoginController {
 		login.setIslogin(true);
 		//TODO: Validation checks (if user already exists)
 		userRepository.createUser(login);
+
 		return "login_template";
 	}
 	/**
@@ -96,6 +90,7 @@ public class LoginController {
 			return "redirect:/";
 		}
 		model.addAttribute("login", new Login());
+
 		return "redirect:/login";
 	}
 
@@ -104,10 +99,9 @@ public class LoginController {
 	**/
 	@RequestMapping(value = "/logout",  method = RequestMethod.GET)
 	public String logOut(HttpServletRequest req){
-	  System.out.println("in logout");
-		User user = BloguxSecurity.getUserByCookie(req, template);
-		System.out.println("LOGOUT: "+user.getUsername());
-		sessionRepository.deleteAuthTokens(user.getId(), user.getSessionToken());
+		User currentUser = (User)req.getAttribute("currentUser");
+		sessionRepository.deleteAuthTokens(currentUser.getId(), currentUser.getSessionToken());
+
 		return "redirect:/login";
 	}
 
