@@ -29,7 +29,11 @@
       <th:block th:switch="${home.activetab}">
         <div th:case="timeline-my">
           <div class=timeline-my-cont>
-            <!--/*/ <th:block th:include="fragments/newpost :: newpost"></th:block> /*/-->
+            <th:block th:switch="${home.isself}">
+              <div th:case="true">
+                <!--/*/ <th:block th:include="fragments/newpost :: newpost"></th:block> /*/-->
+              </div>
+            </th:block>
             <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
           </div>
         </div>

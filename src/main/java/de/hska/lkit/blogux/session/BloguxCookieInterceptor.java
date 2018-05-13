@@ -12,21 +12,19 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public class BloguxCookieInterceptor extends HandlerInterceptorAdapter{
+public class BloguxCookieInterceptor extends HandlerInterceptorAdapter {
   @Autowired
   private StringRedisTemplate template;
 
   @Override
   public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
-  //
     System.out.println("Cookie Interceptor: INSIDE PREHANDLE");
 
     User currentUser = BloguxSecurity.getUserByCookie(req, template);
-    if(currentUser != null){
+    if (currentUser != null) {
       //TODO if needed
       BloguxSecurity.refreshCookie();
-    }
-    else{
+    } else {
       System.out.println("Sending redirect...");
       res.sendRedirect("/login");
       return false;
@@ -34,9 +32,7 @@ public class BloguxCookieInterceptor extends HandlerInterceptorAdapter{
 
     return true;
 
-    }
-//TODO: clean up SimpleSession State in the end (skipped here)
-
-
+  }
+  //TODO: clean up SimpleSession State in the end (skipped here)
 
 }
