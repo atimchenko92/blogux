@@ -16,8 +16,16 @@ public class Home {
   }
 
   public Home(User currentUser) {
-    this.currentUser = currentUser;
+    setCurrentUser(currentUser);
     this.activetab = "timeline-my";
+  }
+
+  public void setCurrentUser(User currentUser){
+    this.currentUser = currentUser;
+  }
+
+  public User getCurrentUser(){
+    return currentUser;
   }
 
   public boolean getIsself(){
@@ -26,14 +34,6 @@ public class Home {
 
   public void setIsself(boolean isSelf){
     this.isself = isSelf;
-  }
-
-  public String getUserName() {
-    return currentUser.getUsername();
-  }
-
-  public String getFirstName() {
-    return currentUser.getUsername();
   }
 
   public void setActivetab(String activetab){

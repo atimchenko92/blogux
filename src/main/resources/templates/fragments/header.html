@@ -10,7 +10,8 @@
       <div class="navbar-collapse offcanvas-collapse open" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#" th:text="${home.isself} ? ('My Timeline     ') : (${user.username}+'\'s Timeline     ')">
+            <a class="nav-link" href="#">
+              <th:block th:utext="${home.isself} ? ('My Timeline     ') : (${user.username}+'\'s Timeline     ')"/>
               <span class="sr-only">(current)</span>
             </a>
           </li>
@@ -18,14 +19,19 @@
             <a class="nav-link" href="##" >Global Timeline</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" th:text="${home.isself} ? ('My Followers     ') : (${user.username}+'\'s Followers     ')"
-             href="###">
-              <span class="badge badge-pill bg-light align-text-bottom" style="color:black">27</span>
+            <a class="nav-link" href="#">
+              <th:block th:utext="${home.isself} ? ('My Followers     ') : (${user.username}+'\'s Followers     ')"/>
+              <span class="badge badge-pill bg-light align-text-bottom" style="color:black">
+                <th:block th:utext="${home.isself} ? (${home.getCurrentUser().getFollowers().size()}) : (${user.getFollowers().size()})"/>
+              </span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="####" th:text="${home.isself} ? ('My Follows     ') : (${user.username}+'\'s Follows     ')">
-              <span class="badge badge-pill bg-light align-text-bottom" style="color:black">10</span>
+            <a class="nav-link" href="#">
+              <th:block th:utext="${home.isself} ? ('My Follows     ') : (${user.username}+'\'s Follows     ')"/>
+              <span class="badge badge-pill bg-light align-text-bottom" style="color:black">
+                <th:block th:utext="${home.isself} ? (${home.getCurrentUser().getFollows().size()}) : (${user.getFollows().size()})"/>
+              </span>
             </a>
           </li>
         </ul>

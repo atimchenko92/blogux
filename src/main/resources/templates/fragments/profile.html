@@ -9,7 +9,7 @@
         <th:block th:switch="${home.isself}">
           <div th:case="false">
             <a th:object="${user}" th:href="@{/user/} + ${user.username} + @{'?action=followUnfollow'}"
-             class="btn btn-primary" th:text="${user.amIFollow(user.username)} ? 'Following' : 'Follow'"></a>
+             class="btn btn-primary" th:text="${home.getCurrentUser().amIFollow(user.username)} ? 'Unfollow' : 'Follow'"></a>
           </div>
         </th:block>
       </div>

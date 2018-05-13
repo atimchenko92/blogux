@@ -36,6 +36,7 @@ public class HomeController {
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     model.addAttribute("post", post != null ? post : new Post());
+    home.setCurrentUser(currentUser);
 
 		return "main_template";
 	}
@@ -46,6 +47,7 @@ public class HomeController {
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     home.setActivetab("settings");
+    home.setCurrentUser(currentUser);
 
     return "main_template";
   }
@@ -70,7 +72,8 @@ public class HomeController {
     User currentUser = (User)req.getAttribute("currentUser");
     model.addAttribute("post", post != null ? post : new Post());
     postRepository.savePost(new Post(currentUser, post.getText()));
-    
+    home.setCurrentUser(currentUser);
+
     return "redirect:/";
   }
 

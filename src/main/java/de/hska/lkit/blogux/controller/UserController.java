@@ -29,11 +29,13 @@ public class UserController {
 
   @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
   public String showUserMain(@ModelAttribute User user, @ModelAttribute Home home, @PathVariable String username, Model model, HttpServletRequest req) {
-    User inspectedUser = userRepository.getUser(username);
+		User currentUser = (User)req.getAttribute("currentUser");
+		User inspectedUser = userRepository.getUser(username);
     model.addAttribute("user", inspectedUser != null ? inspectedUser : new User());
     model.addAttribute("home", home != null ? home : new Home());
     home.setIsself(false);
-		
+    home.setCurrentUser(currentUser);
+
     return "main_template";
   }
 
@@ -49,8 +51,4 @@ public class UserController {
 
     return "redirect:/user/"+username;
   }
-
-
-
-
 }
