@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <div th:fragment="profile">
-    <div class="card" style="width: 18rem;">
+    <div class="card" id="contentleft">
       <img class="card-img-top" th:src="@{/images/placeholder.png}" alt="Card image cap">
       <div class="card-body">
         <h5 th:text="${user.username}" class="card-title"></h5>
