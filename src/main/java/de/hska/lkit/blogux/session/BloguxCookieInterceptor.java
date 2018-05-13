@@ -22,12 +22,12 @@ public class BloguxCookieInterceptor extends HandlerInterceptorAdapter{
     System.out.println("Cookie Interceptor: INSIDE PREHANDLE");
 
     User currentUser = BloguxSecurity.getUserByCookie(req, template);
-    System.out.println(currentUser.getUsername());
-
     if(currentUser != null){
+      //TODO if needed
       BloguxSecurity.refreshCookie();
     }
     else{
+      System.out.println("Sending redirect...");
       res.sendRedirect("/login");
       return false;
     }
