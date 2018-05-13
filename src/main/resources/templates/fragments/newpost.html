@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <div th:fragment="newpost">
-    <div class="form-group">
-      <label for="comment">New Post: (max. 140 characters)</label>
-      <textarea class="form-control" rows="5" id="comment"></textarea>
-    </div>
-    <button type="button" class="btn btn-primary btn-lg">Publish</button>
+    <form th:action="@{/}" th:object="${post}" method="post">
+      <div class="form-group">
+        <label for="comment">New Post: (max. 140 characters)</label>
+        <textarea class="form-control" rows="5" id="comment" th:field="*{text}"></textarea>
+      </div>
+      <button name="action" value="sendPost" class="btn btn-primary btn-lg" type="submit">Publish</button>
+    </form>
   </div>
 </html>

@@ -108,7 +108,7 @@ public class PostRepositoryImpl implements PostRepository {
 		String key = KEY_PREFIX_POST + id;
 		srt_hashOps.put(key, "id", id);
 		srt_hashOps.put(key, "author", post.getAuthor().getUsername());
-		srt_hashOps.put(key, "datetime", post.getFormattedDatetime());
+		srt_hashOps.put(key, "datetime", post.getDatetime());
 		srt_hashOps.put(key, "text", post.getText());
 
 		// the key for a new user is added to the set for all usernames

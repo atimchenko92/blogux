@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 
 /**
  * @author atimchenko
@@ -14,11 +15,17 @@ public class Post implements Serializable{
   private static final long serialVersionUID = 1L;
   private String id;
   private User author;
-  private LocalDateTime datetime;
+  private String datetime;
   private String text;
 
   public Post() {
+    this.datetime = getFormattedDatetime();
+  }
 
+  public Post(User author, String text) {
+    setAuthor(author);
+    setText(text);
+    this.datetime = getFormattedDatetime();
   }
 
 /*
@@ -29,6 +36,10 @@ public class Post implements Serializable{
     this.text = text;
   }
   */
+
+  public String getDatetime() {
+    return this.datetime;
+  }
 
   public void setId(String id) {
     this.id = id;
@@ -46,14 +57,6 @@ public class Post implements Serializable{
     return author;
   }
 
-  public void setDatetime(LocalDateTime datetime) {
-    this.datetime = datetime;
-  }
-
-  public LocalDateTime getDatetime() {
-    return datetime;
-  }
-
   public void setText(String text){
     this.text = text;
   }
@@ -62,9 +65,8 @@ public class Post implements Serializable{
     return text;
   }
 
-  public String getFormattedDatetime() {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    return datetime.format(formatter);
+  private String getFormattedDatetime() {
+    return new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss").format(new java.util.Date());
   }
 
 }
