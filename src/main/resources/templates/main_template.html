@@ -20,7 +20,6 @@
   </head>
 
   <body class="bg-light">
-    <p th:text="'Usename: ' + ${user.username}" />
     <div class=header_container>
       <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
     </div>
@@ -28,6 +27,7 @@
     <div class="container">
       <th:block th:switch="${home.activetab}">
         <div th:case="timeline-my">
+          <!--/*/ <th:block th:include="fragments/profile :: profile"></th:block> /*/-->
           <div class=timeline-my-cont>
             <th:block th:switch="${home.isself}">
               <div th:case="true">

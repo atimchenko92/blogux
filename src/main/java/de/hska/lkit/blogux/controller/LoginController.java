@@ -93,9 +93,6 @@ public class LoginController {
 			String token = sessionRepository.addAuthTokens(login.getName(), TIMEOUT.getSeconds(), TimeUnit.MINUTES);
 			Cookie cookie = new Cookie("auth", token);
 			response.addCookie(cookie);
-			//TODO: get user information
-//			rAttr.addFlashAttribute("user", new User(login.getName(), login.getPwd()));
-//			rAttr.addFlashAttribute("home", new Home());
 			return "redirect:/";
 		}
 		model.addAttribute("login", new Login());

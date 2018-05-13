@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.repo.impl;
 
+import java.util.Set;
 import org.springframework.data.redis.core.ValueOperations;
 import de.hska.lkit.blogux.places.Login;
 import java.util.Map;
@@ -107,7 +108,7 @@ public class UserRepositoryImpl implements UserRepository {
 	public void saveUser(User user) {
 		String key = KEY_PREFIX_USER + user.getUsername();
 		User oldUser = null;
-		System.out.println("saving user:"+user.getUsername());
+		System.out.println("saving user:" + user.getUsername());
 		oldUser = getUser(user.getUsername());
 		System.out.println("old user:" + oldUser.getFirstname());
 		//TODO If pwd change
@@ -138,8 +139,57 @@ public class UserRepositoryImpl implements UserRepository {
 			user.setLastname(srt_hashOps.get(key, "lastname"));
 			user.setUsername(srt_hashOps.get(key, "username"));
 			user.setPassword(srt_hashOps.get(key, "password"));
+			System.out.println("before get follows and followers");
+			user.setFollows(getFollows(username));
+			user.setFollowers(getFollowers(username));
 		} else
 			user = null;
 		return user;
 	}
+
+	@Override
+	public void followUnfollow(User currentUser, User inspectedUser) {
+		String currentFolows = KEY_PREFIX_USER + currentUser.getUsername() + ":follows";
+		String inspectedFolowers = KEY_PREFIX_USER + inspectedUser.getUsername() + ":followers";
+
+		if (checkIfFollows(currentUser, inspectedUser)) {
+			srt_setOps.remove(currentFolows, inspectedUser.getUsername());
+			srt_setOps.remove(inspectedFolowers, currentUser.getUsername());
+		} else {
+			srt_setOps.add(currentFolows, inspectedUser.getUsername());
+			srt_setOps.add(inspectedFolowers, currentUser.getUsername());
+		}
+		//TODO: rebuild timeline
+	}
+
+	@Override
+	public boolean checkIfFollows(User currentUser, User inspectedUser) {
+		String currentFolows = KEY_PREFIX_USER + currentUser.getUsername() + ":follows";
+		return srt_setOps.isMember(currentFolows, inspectedUser.getUsername());
+	}
+
+	@Override
+	public Set<String> getUserFollowers(User currentUser) {
+		String currentFolowers = KEY_PREFIX_USER + currentUser.getUsername() + ":followers";
+		return srt_setOps.members(currentFolowers);
+	}
+
+	@Override
+	public Set<String> getUserFollows(User currentUser) {
+		String currentFolows = KEY_PREFIX_USER + currentUser.getUsername() + ":follows";
+		return srt_setOps.members(currentFolows);
+	}
+
+	@Override
+	public Set<String> getFollowers(String username) {
+		String currentFolowers = KEY_PREFIX_USER + username + ":followers";
+		return srt_setOps.members(currentFolowers);
+	}
+
+	@Override
+	public Set<String> getFollows(String username) {
+		String currentFolows = KEY_PREFIX_USER + username + ":follows";
+		return srt_setOps.members(currentFolows);
+	}
+
 }

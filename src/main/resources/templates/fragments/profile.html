@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:fragment="profile">
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" th:src="@{/images/placeholder.png}" alt="Card image cap">
+      <div class="card-body">
+        <h5 th:text="${user.username}" class="card-title"></h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <th:block th:switch="${home.isself}">
+          <div th:case="false">
+            <a th:object="${user}" th:href="@{/user/} + ${user.username} + @{'?action=followUnfollow'}"
+             class="btn btn-primary" th:text="${user.amIFollow(user.username)} ? 'Following' : 'Follow'"></a>
+          </div>
+        </th:block>
+      </div>
+    </div>
+  </div>
+</html>

@@ -41,12 +41,12 @@ public class BloguxSecurity {
               currentUser.setId(uid);
               currentUser.setUsername(name);
               currentUser.setSessionToken(auth);
+              
               return currentUser;
             }
           }
         }
         return currentUser;
   }
-
 
 }

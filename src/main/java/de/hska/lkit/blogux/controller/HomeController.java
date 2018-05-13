@@ -40,7 +40,9 @@ public class HomeController {
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showHome( @ModelAttribute Home home, @ModelAttribute Post post, Model model, HttpServletRequest req) {
-    User user = BloguxSecurity.getUserByCookie(req, template);
+    User usercook = BloguxSecurity.getUserByCookie(req, template);
+    User user = userRepository.getUser(usercook.getUsername());
+
 		model.addAttribute("user", user != null ? user : new User());
     model.addAttribute("home", home != null ? home : new Home());
     model.addAttribute("post", post != null ? post : new Post());
@@ -50,7 +52,9 @@ public class HomeController {
 
   @RequestMapping(value = "/", method = RequestMethod.GET, params="action=toSettings")
   public String showSettings(@ModelAttribute Home home, Model model, HttpServletRequest req) {
-    User user = BloguxSecurity.getUserByCookie(req, template);
+    User usercook = BloguxSecurity.getUserByCookie(req, template);
+    User user = userRepository.getUser(usercook.getUsername());
+
     model.addAttribute("user", user != null ? user : new User());
     model.addAttribute("home", home != null ? home : new Home());
     home.setActivetab("settings");
@@ -63,7 +67,10 @@ public class HomeController {
     model.addAttribute("user", user != null ? user : new User());
     model.addAttribute("home", home != null ? home : new Home());
     home.setActivetab("timeline-my");
-    User currentUser = BloguxSecurity.getUserByCookie(req, template);
+
+    User usercook = BloguxSecurity.getUserByCookie(req, template);
+    User currentUser = userRepository.getUser(usercook.getUsername());
+
     currentUser.setFirstname(user.getFirstname());
     currentUser.setLastname(user.getLastname());
     System.out.println("Home-save settings: "+currentUser.getFirstname()+currentUser.getLastname());

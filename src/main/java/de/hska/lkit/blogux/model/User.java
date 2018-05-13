@@ -82,23 +82,39 @@ public class User implements Serializable {
     return followers;
   }
 
+  public void setFollowers(Set<String> followers) {
+    this.followers  = followers;
+  }
+
   public Set<String> getFollows() {
     return follows;
   }
 
+  public void setFollows(Set<String> follows) {
+    this.follows = follows;
+  }
+
+  public boolean amIFollow(String name){
+    return this.follows.contains(name);
+  }
+
+  public boolean amIFollowedBy(String name){
+    return this.followers.contains(name);
+  }
+
   public void follow(User user) {
-    this.follows.add(user.getId());
+    this.follows.add(user.getUsername());
   }
 
   public void unfollow(User user) {
-    this.follows.remove(user.getId());
+    this.follows.remove(user.getUsername());
   }
 
   public void getFollowed(User user) {
-    this.followers.add(user.getId());
+    this.followers.add(user.getUsername());
   }
 
   public void getUnfollowed(User user) {
-    this.followers.remove(user.getId());
+    this.followers.remove(user.getUsername());
   }
 }
