@@ -37,6 +37,11 @@
             <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
           </div>
         </div>
+        <div th:case="timeline-gl">
+          <div class=timeline-my-cont id="contentright">
+            <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
+          </div>
+        </div>
         <div th:case="settings">
           <div class=settings-cont>
           <!--/*/ <th:block th:include="fragments/settings :: settings"></th:block> /*/-->

@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.controller;
 
+import java.util.List;
 import java.util.Set;
 import de.hska.lkit.blogux.repo.PostRepository;
 import javax.servlet.http.HttpServletRequest;
@@ -98,6 +99,18 @@ public class HomeController {
     model.addAttribute("ulist", ulist);
     home.setCurrentUser(currentUser);
     home.setActivetab("followers");
+    home.setIsself(true);
+
+    return "main_template";
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=showGlobal")
+  public String showMyGlobal(@ModelAttribute Home home, Model model, HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    List<Post> plist = postRepository.getGlobalPostsInRange(0, -1);
+    model.addAttribute("plist", plist);
+    home.setCurrentUser(currentUser);
+    home.setActivetab("timeline-gl");
     home.setIsself(true);
 
     return "main_template";

@@ -16,7 +16,7 @@
             </a>
           </li>
           <li th:class="${home.activetab.equals('timeline-gl' )} ? ('nav-item active') : ('nav-item')">
-            <a class="nav-link" href="#" >Global Timeline</a>
+            <a class="nav-link" th:href="${home.isself} ? @{/?action=showGlobal} : (@{/user/} + ${user.username} + @{'?action=showGlobal'})" href="#" >Global Timeline</a>
           </li>
           <li th:class="${home.activetab.equals('followers' )} ? ('nav-item active') : ('nav-item')">
             <a class="nav-link" th:href="${home.isself} ? @{/(action=showFollowers)} : (@{/user/} + ${user.username} + @{'?action=showFollowers'})" href="#">

@@ -3,30 +3,17 @@
   <div th:fragment="timeline">
     <div class="my-3 p-3 bg-white rounded box-shadow">
     <h6 class="border-bottom border-gray pb-2 mb-0">Recent posts</h6>
-    <div class="media text-muted pt-3">
-      <img class="mb-4" th:src="@{/images/placeholder.png}" alt="" width="45" height="45">
-      <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">@username</strong>
-         Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-      </p>
-    </div>
 
-    <div class="media text-muted pt-3">
-     <img class="mb-4" th:src="@{/images/placeholder.png}" alt="" width="45" height="45">
-     <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-     <strong class="d-block text-gray-dark">@username</strong>
-       Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-     </p>
-    </div>
+    <th:block th:each="p : ${plist}">
+      <div class="media text-muted pt-3">
+        <img class="mb-4" th:src="@{/images/placeholder.png}" alt="" width="45" height="45">
+        <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+        <strong class="d-block text-gray-dark"><th:block th:utext="'@'+${p.getAuthor()}"/></strong>
+          <th:block th:utext="${p.getText()}"/>
+        </p>
+      </div>
+    </th:block>
 
-    <div class="media text-muted pt-3">
-     <img class="mb-4" th:src="@{/images/placeholder.png}" alt="" width="45" height="45">
-     <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-     <strong class="d-block text-gray-dark">@username</strong>
-       Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-     </p>
-    </div>
-    
     <ul class="pagination">
      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
      <li class="page-item"><a class="page-link" href="#">1</a></li>

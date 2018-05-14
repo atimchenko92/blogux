@@ -1,5 +1,8 @@
 package de.hska.lkit.blogux.controller;
 
+import de.hska.lkit.blogux.repo.PostRepository;
+import de.hska.lkit.blogux.model.Post;
+import java.util.List;
 import java.util.Set;
 import de.hska.lkit.blogux.places.Home;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,11 +24,13 @@ import de.hska.lkit.blogux.repo.UserRepository;
 public class UserController {
 
 	private final UserRepository userRepository;
+  private final PostRepository postRepository;
 
 	@Autowired
-	public UserController(UserRepository userRepository) {
+	public UserController(UserRepository userRepository, PostRepository postRepository) {
 		super();
 		this.userRepository = userRepository;
+		this.postRepository = postRepository;
 	}
 
   @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
@@ -62,7 +67,7 @@ public class UserController {
 
     model.addAttribute("user", inspectedUser);
 		model.addAttribute("ulist", ulist);
-		
+
 		home.setActivetab("follows");
 		home.setCurrentUser(currentUser);
 	  home.setIsself(false);
@@ -82,6 +87,22 @@ public class UserController {
 		home.setCurrentUser(currentUser);
 		home.setActivetab("followers");
 	  home.setIsself(false);
+
+		return "main_template";
+	}
+
+	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET, params = "action=showGlobal")
+	public String showUserGlobal(@ModelAttribute Home home,@PathVariable String username, Model model, HttpServletRequest req) {
+		User currentUser = (User) req.getAttribute("currentUser");
+		User inspectedUser = userRepository.getUser(username);
+		List<Post> plist = postRepository.getGlobalPostsInRange(0, -1);
+
+		model.addAttribute("plist", plist);
+    model.addAttribute("user", inspectedUser);
+
+		home.setCurrentUser(currentUser);
+		home.setActivetab("timeline-gl");
+		home.setIsself(false);
 
 		return "main_template";
 	}
