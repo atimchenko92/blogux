@@ -41,7 +41,7 @@ public class LoginController {
 	public String navigateToSignup(@ModelAttribute Login login, Model model) {
 		model.addAttribute("login", login != null ? login : new Login());
 		login.setIslogin(false);
-		
+
 		return "login_template";
 	}
 
@@ -84,6 +84,7 @@ public class LoginController {
 	@RequestMapping(value = "/login",  method = RequestMethod.POST, params="action=login")
 	public String logIn(@ModelAttribute Login login, HttpServletResponse response, Model model, RedirectAttributes rAttr) {
 		if(sessionRepository.checkAuth(login.getName(), login.getPwd())){
+			System.out.println("In login");
 			String token = sessionRepository.addAuthTokens(login.getName(), TIMEOUT.getSeconds(), TimeUnit.MINUTES);
 			Cookie cookie = new Cookie("auth", token);
 			response.addCookie(cookie);

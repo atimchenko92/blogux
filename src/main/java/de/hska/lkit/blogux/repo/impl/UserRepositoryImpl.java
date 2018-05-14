@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.repo.impl;
 
+import de.hska.lkit.blogux.repo.PostRepository;
 import org.springframework.util.ObjectUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -69,6 +70,9 @@ public class UserRepositoryImpl implements UserRepository {
 	 */
 	@Resource(name = "redisTemplate")
 	private HashOperations<String, String, User> rt_hashOps;
+
+	@Autowired
+	private PostRepository postRepository;
 
 	@Autowired
 	public UserRepositoryImpl(RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate) {
@@ -142,6 +146,11 @@ public class UserRepositoryImpl implements UserRepository {
 			user.setPassword(srt_hashOps.get(key, "password"));
 			user.setFollows(getFollows(username));
 			user.setFollowers(getFollowers(username));
+
+			//Set all user posts
+			user.setPersonalPosts(postRepository.getUserPostsInRange(username, 0, -1));
+			//TODO: Set all following posts
+
 		} else
 			user = null;
 		return user;

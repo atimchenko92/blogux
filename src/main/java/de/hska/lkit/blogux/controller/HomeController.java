@@ -38,6 +38,8 @@ public class HomeController {
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     model.addAttribute("post", post != null ? post : new Post());
+    model.addAttribute("plist", currentUser.getPersonalPosts());  
+
     home.setCurrentUser(currentUser);
 
     return "main_template";

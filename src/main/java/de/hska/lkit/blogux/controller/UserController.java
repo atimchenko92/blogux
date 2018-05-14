@@ -39,6 +39,7 @@ public class UserController {
 		User inspectedUser = userRepository.getUser(username);
     model.addAttribute("user", inspectedUser != null ? inspectedUser : new User());
     model.addAttribute("home", home != null ? home : new Home());
+    model.addAttribute("plist", inspectedUser.getPersonalPosts());  
     home.setIsself(false);
     home.setCurrentUser(currentUser);
 

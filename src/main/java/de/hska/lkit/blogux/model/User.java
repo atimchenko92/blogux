@@ -22,9 +22,8 @@ public class User implements Serializable {
   private Set<String> followers;
   private Set<String> follows;
 
-  private List<Post> myPosts;
+  private List<Post> personalPosts;
   private List<Post> followingPosts;
-  private List<Post> globalPosts;
 
   public User() {
 
@@ -97,6 +96,22 @@ public class User implements Serializable {
 
   public void setFollows(Set<String> follows) {
     this.follows = follows;
+  }
+
+  public void setPersonalPosts(List<Post> postsList){
+    this.personalPosts = postsList;
+  }
+
+  public void setFollowingPosts(List<Post> postsList){
+    this.followingPosts = postsList;
+  }
+
+  public List<Post> getPersonalPosts() {
+    return personalPosts;
+  }
+
+  public List<Post> getFollowingPosts() {
+    return followingPosts;
   }
 
   public boolean amIFollow(String name){

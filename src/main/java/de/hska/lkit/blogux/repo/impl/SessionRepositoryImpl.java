@@ -11,20 +11,24 @@ import org.springframework.stereotype.Repository;
 import de.hska.lkit.blogux.repo.SessionRepository;
 
 @Repository
-public class SessionRepositoryImpl implements SessionRepository{
+public class SessionRepositoryImpl implements SessionRepository {
   @Autowired
   private StringRedisTemplate template;
 
   @Override
-  public boolean checkAuth(String name, String pwd){
-    BoundHashOperations<String, String, String> userOps = template.boundHashOps("user:" + name);
-    return userOps.get("password").equals(pwd);
+  public boolean checkAuth(String name, String pwd) {
+    try {
+      BoundHashOperations<String, String, String> userOps = template.boundHashOps("user:" + name);
+      return userOps.get("password").equals(pwd);
+    } catch (NullPointerException e) {
+      //In case user does not even exist
+      return false;
+    }
   }
 
   @Override
-  public String addAuthTokens(String name, long duration, TimeUnit timeunit ){
-    String uid = (String)template.opsForHash().get("user:"+name, "id");
-//    String uid = template.opsForValue().get("uname:" + name + ":uid");
+  public String addAuthTokens(String name, long duration, TimeUnit timeunit) {
+    String uid = (String) template.opsForHash().get("user:" + name, "id");
     String auth = UUID.randomUUID().toString();
     //Create Auth Hash
     template.boundHashOps("uid:" + uid + ":auth").put("auth", auth);
@@ -35,7 +39,7 @@ public class SessionRepositoryImpl implements SessionRepository{
   }
 
   @Override
-  public void deleteAuthTokens(String uid, String auth){
+  public void deleteAuthTokens(String uid, String auth) {
     String authKey = "uid:" + uid + ":auth";
     String authUID = "auth:" + auth + ":uid";
     List<String> keysToDelete = Arrays.asList(authKey, authUID);
@@ -43,7 +47,7 @@ public class SessionRepositoryImpl implements SessionRepository{
   }
 
   @Override
-  public String getUIDbyToken(String token){
+  public String getUIDbyToken(String token) {
     return template.opsForValue().get("auth:" + token + ":uid");
   }
 }
