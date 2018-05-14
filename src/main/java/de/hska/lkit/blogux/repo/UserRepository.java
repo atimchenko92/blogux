@@ -20,4 +20,5 @@ public interface UserRepository {
 	public Set<String> getUserFollows(User currentUser);
 	public Set<String> getFollowers(String username);
 	public Set<String> getFollows(String username);
+	public Set<String> getSearchResults(String pattern);
 }

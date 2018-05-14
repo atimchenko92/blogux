@@ -9,6 +9,7 @@ public class Home {
   private String activetab;
   private User currentUser;
   private boolean isself;
+  private String srcPattern;
 
   public Home() {
     this.activetab = "timeline-my";
@@ -42,5 +43,13 @@ public class Home {
 
   public String getActivetab(){
     return activetab;
+  }
+
+  public void setSrcPattern(String pattern){
+    this.srcPattern = pattern;
+  }
+
+  public String getSrcPattern(){
+    return srcPattern;
   }
 }

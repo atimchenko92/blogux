@@ -1,5 +1,7 @@
 package de.hska.lkit.blogux.controller;
 
+import javax.validation.Valid;
+import org.springframework.validation.BindingResult;
 import java.util.List;
 import java.util.Set;
 import de.hska.lkit.blogux.repo.PostRepository;
@@ -38,7 +40,7 @@ public class HomeController {
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     model.addAttribute("post", post != null ? post : new Post());
-    model.addAttribute("plist", currentUser.getPersonalPosts());  
+    model.addAttribute("plist", currentUser.getPersonalPosts());
 
     home.setCurrentUser(currentUser);
 
@@ -73,12 +75,23 @@ public class HomeController {
   }
 
   @RequestMapping(value = "/", method = RequestMethod.POST, params = "action=sendPost")
-  public String sendPost(@ModelAttribute Post post, @ModelAttribute Home home, Model model, HttpServletRequest req) {
+  public String sendPost(@Valid @ModelAttribute Post post, BindingResult bindingResult, @ModelAttribute User user, @ModelAttribute Home home, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
-    model.addAttribute("post", post != null ? post : new Post());
-    postRepository.savePost(new Post(currentUser.getUsername(), post.getText()));
-    home.setCurrentUser(currentUser);
 
+    model.addAttribute("user", currentUser);
+    model.addAttribute("post", post != null ? post : new Post());
+    model.addAttribute("home", home != null ? home : new Home());
+    model.addAttribute("plist", currentUser.getPersonalPosts());
+
+    home.setCurrentUser(currentUser);
+    home.setIsself(true);
+    home.setActivetab("timeline-my");
+
+
+    if (bindingResult.hasErrors())
+      return "main_template";
+
+    postRepository.savePost(new Post(currentUser.getUsername(), post.getText()));
     return "redirect:/";
   }
 
@@ -113,6 +126,21 @@ public class HomeController {
     model.addAttribute("plist", plist);
     home.setCurrentUser(currentUser);
     home.setActivetab("timeline-gl");
+    home.setIsself(true);
+
+    return "main_template";
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.POST, params = "action=search")
+  public String searchUsers(@ModelAttribute User user, @ModelAttribute Home home, Model model,
+      HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    Set<String> userList = userRepository.getSearchResults(home.getSrcPattern());
+
+    model.addAttribute("ulist", userList);
+
+    home.setCurrentUser(currentUser);
+    home.setActivetab("search");
     home.setIsself(true);
 
     return "main_template";

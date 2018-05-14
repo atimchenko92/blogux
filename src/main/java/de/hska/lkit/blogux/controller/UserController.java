@@ -36,10 +36,16 @@ public class UserController {
   @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
   public String showUserMain(@ModelAttribute User user, @ModelAttribute Home home, @PathVariable String username, Model model, HttpServletRequest req) {
 		User currentUser = (User)req.getAttribute("currentUser");
+
+		//Redirection to home, prohibit
+		if(currentUser.getUsername().equals(username))
+			return "redirect:/";
+
 		User inspectedUser = userRepository.getUser(username);
+
     model.addAttribute("user", inspectedUser != null ? inspectedUser : new User());
     model.addAttribute("home", home != null ? home : new Home());
-    model.addAttribute("plist", inspectedUser.getPersonalPosts());  
+    model.addAttribute("plist", inspectedUser.getPersonalPosts());
     home.setIsself(false);
     home.setCurrentUser(currentUser);
 
@@ -50,6 +56,11 @@ public class UserController {
   public String followUnfollow(@ModelAttribute User user, @ModelAttribute Home home,
     @PathVariable String username, Model model, HttpServletRequest req) {
 		User currentUser = (User)req.getAttribute("currentUser");
+
+		//Redirection to home, prohibit
+		if(currentUser.getUsername().equals(username))
+			return "redirect:/";
+
 		userRepository.followUnfollow(currentUser, user);
 
     model.addAttribute("user", user != null ? user : new User());
@@ -62,8 +73,13 @@ public class UserController {
 
 	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET, params = "action=showFollows")
 	public String showUserFollows(@ModelAttribute User user, @ModelAttribute Home home, @PathVariable String username, Model model, HttpServletRequest req) {
-		User inspectedUser = userRepository.getUser(username);
 		User currentUser = (User)req.getAttribute("currentUser");
+
+		//Redirection to home
+		if(currentUser.getUsername().equals(username))
+			return "redirect:/?action=showFollows";
+
+		User inspectedUser = userRepository.getUser(username);
 		Set<String> ulist = inspectedUser.getFollows();
 
     model.addAttribute("user", inspectedUser);
@@ -78,8 +94,13 @@ public class UserController {
 
 	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET, params = "action=showFollowers")
 	public String showUserFollowers(@ModelAttribute Home home, @PathVariable String username, Model model, HttpServletRequest req) {
-		User inspectedUser = userRepository.getUser(username);
 		User currentUser = (User)req.getAttribute("currentUser");
+
+		//Redirection to home
+		if(currentUser.getUsername().equals(username))
+			return "redirect:/?action=showFollowers";
+
+		User inspectedUser = userRepository.getUser(username);
 		Set<String> ulist = inspectedUser.getFollowers();
 
 		model.addAttribute("ulist", ulist);
@@ -95,6 +116,11 @@ public class UserController {
 	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET, params = "action=showGlobal")
 	public String showUserGlobal(@ModelAttribute Home home,@PathVariable String username, Model model, HttpServletRequest req) {
 		User currentUser = (User) req.getAttribute("currentUser");
+
+		//Redirection to home
+		if(currentUser.getUsername().equals(username))
+			return "redirect:/?action=showGlobal";
+
 		User inspectedUser = userRepository.getUser(username);
 		List<Post> plist = postRepository.getGlobalPostsInRange(0, -1);
 

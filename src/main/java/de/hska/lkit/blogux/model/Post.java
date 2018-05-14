@@ -1,5 +1,7 @@
 package de.hska.lkit.blogux.model;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
@@ -13,6 +15,8 @@ public class Post implements Serializable{
   private String id;
   private String author;
   private String datetime;
+
+  @Size(min=1, max=140, message="Post should contain from 1 to 140 characters")
   private String text;
 
   public Post() {

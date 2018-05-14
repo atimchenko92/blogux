@@ -5,6 +5,7 @@
       <div class="form-group">
         <label for="comment">New Post: (max. 140 characters)</label>
         <textarea class="form-control" rows="5" id="comment" th:field="*{text}"></textarea>
+        <span th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="text-danger help-block" >error</span>
       </div>
       <button name="action" value="sendPost" class="btn btn-primary btn-lg" type="submit">Publish</button>
     </form>

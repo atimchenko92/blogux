@@ -1,5 +1,7 @@
 package de.hska.lkit.blogux.repo.impl;
 
+import org.springframework.data.redis.connection.RedisZSetCommands.Range;
+import java.util.HashSet;
 import de.hska.lkit.blogux.repo.PostRepository;
 import org.springframework.util.ObjectUtils;
 import javax.servlet.http.Cookie;
@@ -225,5 +227,34 @@ public class UserRepositoryImpl implements UserRepository {
 		String currentFolows = KEY_PREFIX_USER + username + ":follows";
 		return srt_setOps.members(currentFolows);
 	}
+
+	@Override
+public Set<String> getSearchResults(String pattern) {
+
+	System.out.println("Searching for pattern  " + pattern);
+	Set<String> setResult = new HashSet<String>();
+
+	if (pattern.equals("")){
+
+		// get all user
+		setResult = srt_setOps.members(KEY_SET_ALL_USERNAMES);//rt_hashOps.entries(KEY_HASH_ALL_USERS);
+
+	} else {
+		// search for user with pattern
+
+		char[] chars = pattern.toCharArray();
+		System.out.println("Pattern search");
+		System.out.println("Before:"+chars[pattern.length() - 1]);
+		chars[pattern.length() - 1] = (char) (chars[pattern.length() - 1] + 1);
+		System.out.println("After:"+chars[pattern.length() - 1]);
+		String searchto = new String(chars);
+
+		setResult = srt_zSetOps.rangeByLex(KEY_ZSET_ALL_USERNAMES,
+			Range.range().gte(pattern).lt(searchto));
+	}
+
+	return setResult;
+
+}
 
 }
