@@ -1,10 +1,12 @@
 package de.hska.lkit.blogux.repo.impl;
 
-import java.util.Map;
 
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,6 +37,8 @@ public class PostRepositoryImpl implements PostRepository {
 	private static final String KEY_HASH_ALL_POSTS = "all:posts";
 
 	private static final String KEY_PREFIX_POST = "post:";
+
+	private static final String KEY_GLOBAL_POST = "post:global";
 
 	/**
 	 * to generate unique ids for user
@@ -114,8 +118,11 @@ public class PostRepositoryImpl implements PostRepository {
 		srt_hashOps.put(key, "text", post.getText());
 
 		// user own post persistence under user id
-		String keyUserPosts = "user:" + post.getAuthor() + ":myposts";
+		String keyUserPosts = "user:" + post.getAuthor() + ":posts";
 		srt_listOps.leftPush(keyUserPosts, post.getId());
+
+		// global List
+		srt_listOps.leftPush(KEY_GLOBAL_POST, post.getId());
 
 		// the key for a new user is added to the set for all usernames
 		srt_setOps.add(KEY_SET_ALL_POSTS, post.getId());
@@ -147,6 +154,26 @@ public class PostRepositoryImpl implements PostRepository {
 
 	}
 
+	@Override
+	public List<Post> getUserPostsInRange(String username, long start, long end) {
+		String key = "user:" + username + ":posts";
+		List<Post> postList = new ArrayList<>();
+		List<String> postIdList = srt_listOps.range(key, start, end);
+		for (String postId : postIdList) {
+			postList.add(getPost(postId));
+		}
+		return postList;
+	}
+
+	@Override
+	public List<Post> getGlobalPostsInRange(long start, long end) {
+		List<Post> postList = new ArrayList<>();
+		List<String> postIdList = srt_listOps.range(KEY_GLOBAL_POST, start, end);
+		for (String postId : postIdList) {
+			postList.add(getPost(postId));
+		}
+		return postList;
+	}
 
 	@Override
 	public Map<String, Post> getAllPosts() {
