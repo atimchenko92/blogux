@@ -9,16 +9,16 @@
       </button>
       <div class="navbar-collapse offcanvas-collapse open" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">
+          <li th:class="${home.activetab.equals('timeline-my' )} ? ('nav-item active') : ('nav-item')">
+            <a class="nav-link" th:href="${home.isself} ? @{/} : (@{/user/} + ${user.username})">
               <th:block th:utext="${home.isself} ? ('My Timeline     ') : (${user.username}+'\'s Timeline     ')"/>
               <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li th:class="${home.activetab.equals('timeline-gl' )} ? ('nav-item active') : ('nav-item')">
             <a class="nav-link" href="#" >Global Timeline</a>
           </li>
-          <li class="nav-item">
+          <li th:class="${home.activetab.equals('followers' )} ? ('nav-item active') : ('nav-item')">
             <a class="nav-link" th:href="${home.isself} ? @{/(action=showFollowers)} : (@{/user/} + ${user.username} + @{'?action=showFollowers'})" href="#">
               <th:block th:utext="${home.isself} ? ('My Followers     ') : (${user.username}+'\'s Followers     ')"/>
               <span class="badge badge-pill bg-light align-text-bottom" style="color:black">
@@ -26,7 +26,7 @@
               </span>
             </a>
           </li>
-          <li class="nav-item">
+          <li th:class="${home.activetab.equals('follows' )} ? ('nav-item active') : ('nav-item')">
             <a class="nav-link" th:href="${home.isself} ? @{/(action=showFollows)} : (@{/user/} + ${user.username} + @{'?action=showFollows'})" href="#">
               <th:block th:utext="${home.isself} ? ('My Follows     ') : (${user.username}+'\'s Follows     ')"/>
               <span class="badge badge-pill bg-light align-text-bottom" style="color:black">
@@ -40,7 +40,7 @@
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li th:class="${home.activetab.equals('settings' )} ? ('nav-item active') : ('nav-item')">
             <a th:href="@{/(action='toSettings')}" class="nav-link" href="#">Settings</a>
           </li>
           <li class="nav-item">
@@ -50,7 +50,7 @@
       </div>
     </nav>
 
-    <th:block th:switch="${home.isself}">
+    <th:block th:switch="${home.isself} and ${home.activetab.equals('timeline-my')} ">
       <div th:case="true">
         <div class="nav-scroller bg-white box-shadow">
           <nav class="nav nav-underline">

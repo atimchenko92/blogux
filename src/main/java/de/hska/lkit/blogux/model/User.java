@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.model;
 
+import java.util.List;
 import java.util.Set;
 import java.io.Serializable;
 /**
@@ -20,6 +21,10 @@ public class User implements Serializable {
 
   private Set<String> followers;
   private Set<String> follows;
+
+  private List<Post> myPosts;
+  private List<Post> followingPosts;
+  private List<Post> globalPosts;
 
   public User() {
 
