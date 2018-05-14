@@ -73,7 +73,7 @@ public class HomeController {
   public String sendPost(@ModelAttribute Post post, @ModelAttribute Home home, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
     model.addAttribute("post", post != null ? post : new Post());
-    postRepository.savePost(new Post(currentUser, post.getText()));
+    postRepository.savePost(new Post(currentUser.getUsername(), post.getText()));
     home.setCurrentUser(currentUser);
 
     return "redirect:/";

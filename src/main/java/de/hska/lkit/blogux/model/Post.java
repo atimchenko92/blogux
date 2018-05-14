@@ -11,7 +11,7 @@ public class Post implements Serializable{
 
   private static final long serialVersionUID = 1L;
   private String id;
-  private User author;
+  private String author;
   private String datetime;
   private String text;
 
@@ -19,7 +19,7 @@ public class Post implements Serializable{
     this.datetime = getFormattedDatetime();
   }
 
-  public Post(User author, String text) {
+  public Post(String author, String text) {
     setAuthor(author);
     setText(text);
     this.datetime = getFormattedDatetime();
@@ -38,6 +38,10 @@ public class Post implements Serializable{
     return this.datetime;
   }
 
+  public void setDatetime(String datetime) {
+    this.datetime = datetime;
+  }
+
   public void setId(String id) {
     this.id = id;
   }
@@ -46,11 +50,11 @@ public class Post implements Serializable{
     return id;
   }
 
-  public void setAuthor(User author) {
+  public void setAuthor(String author) {
     this.author = author;
   }
 
-  public User getAuthor() {
+  public String getAuthor() {
     return author;
   }
 
