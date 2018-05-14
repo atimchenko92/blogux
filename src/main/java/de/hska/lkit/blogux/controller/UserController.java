@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.controller;
 
+import java.util.Set;
 import de.hska.lkit.blogux.places.Home;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +49,40 @@ public class UserController {
     model.addAttribute("user", user != null ? user : new User());
     model.addAttribute("home", home != null ? home : new Home());
     home.setIsself(false);
+		home.setCurrentUser(currentUser);
 
     return "redirect:/user/"+username;
   }
+
+	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET, params = "action=showFollows")
+	public String showUserFollows(@ModelAttribute User user, @ModelAttribute Home home, @PathVariable String username, Model model, HttpServletRequest req) {
+		User inspectedUser = userRepository.getUser(username);
+		User currentUser = (User)req.getAttribute("currentUser");
+		Set<String> ulist = inspectedUser.getFollows();
+
+    model.addAttribute("user", inspectedUser);
+		model.addAttribute("ulist", ulist);
+		
+		home.setActivetab("follows");
+		home.setCurrentUser(currentUser);
+	  home.setIsself(false);
+
+		return "main_template";
+	}
+
+	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET, params = "action=showFollowers")
+	public String showUserFollowers(@ModelAttribute Home home, @PathVariable String username, Model model, HttpServletRequest req) {
+		User inspectedUser = userRepository.getUser(username);
+		User currentUser = (User)req.getAttribute("currentUser");
+		Set<String> ulist = inspectedUser.getFollowers();
+
+		model.addAttribute("ulist", ulist);
+    model.addAttribute("user", inspectedUser);
+
+		home.setCurrentUser(currentUser);
+		home.setActivetab("followers");
+	  home.setIsself(false);
+
+		return "main_template";
+	}
 }

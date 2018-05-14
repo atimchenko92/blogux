@@ -16,10 +16,10 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="##" >Global Timeline</a>
+            <a class="nav-link" href="#" >Global Timeline</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" th:href="${home.isself} ? @{/(action=showFollowers)} : (@{/user/} + ${user.username} + @{'?action=showFollowers'})" href="#">
               <th:block th:utext="${home.isself} ? ('My Followers     ') : (${user.username}+'\'s Followers     ')"/>
               <span class="badge badge-pill bg-light align-text-bottom" style="color:black">
                 <th:block th:utext="${home.isself} ? (${home.getCurrentUser().getFollowers().size()}) : (${user.getFollowers().size()})"/>
@@ -27,7 +27,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" th:href="${home.isself} ? @{/(action=showFollows)} : (@{/user/} + ${user.username} + @{'?action=showFollows'})" href="#">
               <th:block th:utext="${home.isself} ? ('My Follows     ') : (${user.username}+'\'s Follows     ')"/>
               <span class="badge badge-pill bg-light align-text-bottom" style="color:black">
                 <th:block th:utext="${home.isself} ? (${home.getCurrentUser().getFollows().size()}) : (${user.getFollows().size()})"/>

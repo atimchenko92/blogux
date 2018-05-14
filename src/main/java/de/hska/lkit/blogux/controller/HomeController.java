@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.controller;
 
+import java.util.Set;
 import de.hska.lkit.blogux.repo.PostRepository;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
@@ -31,19 +32,19 @@ public class HomeController {
   }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
-	public String showHome( @ModelAttribute Home home, @ModelAttribute Post post, Model model, HttpServletRequest req) {
-    User currentUser = (User)req.getAttribute("currentUser");
+  public String showHome(@ModelAttribute Home home, @ModelAttribute Post post, Model model, HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     model.addAttribute("post", post != null ? post : new Post());
     home.setCurrentUser(currentUser);
 
-		return "main_template";
-	}
+    return "main_template";
+  }
 
-  @RequestMapping(value = "/", method = RequestMethod.GET, params="action=toSettings")
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=toSettings")
   public String showSettings(@ModelAttribute Home home, Model model, HttpServletRequest req) {
-    User currentUser = (User)req.getAttribute("currentUser");
+    User currentUser = (User) req.getAttribute("currentUser");
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     home.setActivetab("settings");
@@ -52,9 +53,10 @@ public class HomeController {
     return "main_template";
   }
 
-  @RequestMapping(value = "/", method = RequestMethod.POST, params="action=saveSettings")
-  public String saveSettings(@ModelAttribute User user, @ModelAttribute Home home, Model model, HttpServletRequest req) {
-    User currentUser = (User)req.getAttribute("currentUser");
+  @RequestMapping(value = "/", method = RequestMethod.POST, params = "action=saveSettings")
+  public String saveSettings(@ModelAttribute User user, @ModelAttribute Home home, Model model,
+      HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
 
     currentUser.setFirstname(user.getFirstname());
     currentUser.setLastname(user.getLastname());
@@ -67,14 +69,38 @@ public class HomeController {
     return "redirect:/";
   }
 
-  @RequestMapping(value = "/", method = RequestMethod.POST, params="action=sendPost")
+  @RequestMapping(value = "/", method = RequestMethod.POST, params = "action=sendPost")
   public String sendPost(@ModelAttribute Post post, @ModelAttribute Home home, Model model, HttpServletRequest req) {
-    User currentUser = (User)req.getAttribute("currentUser");
+    User currentUser = (User) req.getAttribute("currentUser");
     model.addAttribute("post", post != null ? post : new Post());
     postRepository.savePost(new Post(currentUser, post.getText()));
     home.setCurrentUser(currentUser);
 
     return "redirect:/";
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=showFollows")
+  public String showFollows(@ModelAttribute Home home, Model model, HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    Set<String> ulist = currentUser.getFollows();
+    model.addAttribute("ulist", ulist);
+    home.setCurrentUser(currentUser);
+    home.setActivetab("follows");
+    home.setIsself(true);
+
+    return "main_template";
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=showFollowers")
+  public String showFollowers(@ModelAttribute Home home, Model model, HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    Set<String> ulist = currentUser.getFollowers();
+    model.addAttribute("ulist", ulist);
+    home.setCurrentUser(currentUser);
+    home.setActivetab("followers");
+    home.setIsself(true);
+
+    return "main_template";
   }
 
 }
