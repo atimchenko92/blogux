@@ -7,6 +7,7 @@
     <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
     <input type="text" class="form-control"
       placeholder="Username" required="" th:field="*{name}">
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger help-block" >error</span>
     <div class="checkbox mb-3"></div>
     <label for="inputPassword" class="sr-only">Password</label>
     <input id="inputPassword" type="password"  class="form-control"

@@ -1,13 +1,17 @@
 package de.hska.lkit.blogux.places;
 
+import de.hska.lkit.blogux.util.UserExistsConstraint;
+
 public class Login {
 
+  @UserExistsConstraint
   private String name;
+  
   private String pwd;
   private String pwdConfirm;
   private String content;
   private boolean islogin;
-  
+
   /**
    * @author atimchenko
    *

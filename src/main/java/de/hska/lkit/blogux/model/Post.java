@@ -1,6 +1,5 @@
 package de.hska.lkit.blogux.model;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

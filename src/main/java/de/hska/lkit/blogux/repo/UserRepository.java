@@ -16,6 +16,7 @@ public interface UserRepository {
 	public User getUserByCookie(HttpServletRequest req);
 	public void followUnfollow(User currentUser, User inspectedUser);
 	public boolean checkIfFollows(User currentUser, User inspectedUser);
+	public boolean userAlreadyExists(String username);
 	public Set<String> getUserFollowers(User currentUser);
 	public Set<String> getUserFollows(User currentUser);
 	public Set<String> getFollowers(String username);

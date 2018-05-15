@@ -1,5 +1,7 @@
 package de.hska.lkit.blogux.controller;
 
+import org.springframework.validation.BindingResult;
+import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.concurrent.TimeUnit;
@@ -70,11 +72,16 @@ public class LoginController {
 	* Perform sign up
 	**/
 	@RequestMapping(value = "/login",  method = RequestMethod.POST, params="action=signup")
-	public String signUp(@ModelAttribute Login login, Model model) {
+	public String signUp(@ModelAttribute @Valid Login login, BindingResult bindingResult, Model model) {
 		model.addAttribute("login", login != null ? login : new Login());
-		login.setIslogin(true);
-		//TODO: Validation checks (if user already exists)
+
+		if (bindingResult.hasErrors()){
+			login.setIslogin(false);
+			return "login_template";
+		}
+
 		userRepository.createUser(login);
+		login.setIslogin(true);
 
 		return "login_template";
 	}
