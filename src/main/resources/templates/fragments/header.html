@@ -55,7 +55,7 @@
           <nav class="navbar navbar-expand-lg navbar-light bg-white">
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
-                <a th:class="${home.activetab.equals('timeline-my')} ? ('nav-item nav-link active') : ('nav-item nav-link')" th:href="@{/}">My and Follows Posts
+                <a th:class="${home.activetab.equals('timeline-my')} ? ('nav-item nav-link active') : ('nav-item nav-link')" th:href="@{/}">My Feed
                   <span class="badge badge-pill bg-dark align-text-bottom">
                     <th:block th:utext="${home.getCurrentUser().getPersAndFolPosts().size()}"/>
                   </span>
@@ -65,7 +65,7 @@
                     <th:block th:utext="${home.getCurrentUser().getPersonalPosts().size()}"/>
                   </span>
                 </a>
-                <a th:class="${home.activetab.equals('timeline-myfollows')} ? ('nav-item nav-link active') : ('nav-item nav-link')" th:href="@{/(action='timeline-myfollows')}">Follows Posts
+                <a th:class="${home.activetab.equals('timeline-myfollows')} ? ('nav-item nav-link active') : ('nav-item nav-link')" th:href="@{/(action='timeline-myfollows')}">My Follows
                   <span class="badge badge-pill bg-dark align-text-bottom">
                     <th:block th:utext="${home.getCurrentUser().getFollowingPosts().size()}"/>
                   </span>

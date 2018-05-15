@@ -2,29 +2,52 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <div th:fragment="timeline">
     <div class="my-3 p-3 bg-white rounded box-shadow">
-    <h6 class="border-bottom border-gray pb-2 mb-0">Recent posts</h6>
 
-    <th:block th:each="p : ${plist}">
-      <div class="media text-muted pt-3">
-        <img class="mb-4" th:src="@{/images/placeholder.png}" alt="" width="45" height="45">
-        <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-          <strong class="d-block text-gray-dark">
-            <a style="text-decoration:none" th:href="(@{/user/} + ${p.getAuthor()})">
-              <th:block th:utext="'@'+${p.getAuthor()}"/>
-            </a>
-          </strong>
-          <th:block th:utext="${p.getText()}"/>
-        </p>
+      <div th:if="${plist.size()} gt '0'">
+        <h6 class="border-bottom border-gray pb-2 mb-0">Recent posts</h6>
+        <th:block th:each="p : ${plist}">
+          <div class="media text-muted pt-3">
+            <img class="mb-4" th:src="@{/images/placeholder.png}" alt="" width="45" height="45">
+            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+              <strong class="d-block text-gray-dark">
+                <a style="text-decoration:none" th:href="(@{/user/} + ${p.getAuthor()})">
+                  <th:block th:utext="'@'+${p.getAuthor()}"/>
+                </a>
+              </strong>
+              <th:block th:utext="${p.getText()}"/>
+            </p>
+          </div>
+        </th:block>
       </div>
-    </th:block>
+      <div th:if="${plist.size()} eq '0'">
+        <div class="jumbotron jumbotron-fluid">
+          <div class="container">
+            <div th:if="(${home.activetab} eq 'timeline-my') or (${home.activetab} eq 'timeline-myposts')">
+              <h1 class="display-4">Nothing to feed from</h1>
+              <div th:if="${home.isself}">
+                <p class="lead">Take a chance and publish a post :)</p>
+              </div>
+            </div>
+            <div th:if="${home.activetab} eq 'timeline-myfollows'">
+              <h1 class="display-4">Nothing to feed from</h1>
+              <p class="lead">Come along and follow people from blogux
+                <a style="text-decoration:none" th:href="${home.isself} ? @{/(action=showGlobal)} : (@{/user/} + ${user.username} + @{'?action=showGlobal'})">
+                community</a> :)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <ul class="pagination">
-     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-     <li class="page-item"><a class="page-link" href="#">1</a></li>
-     <li class="page-item active"><a class="page-link" href="#">2</a></li>
-     <li class="page-item"><a class="page-link" href="#">3</a></li>
-     <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    </ul>
+      <div th:if="${plist.size()} gt '10'">
+        <ul class="pagination">
+         <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+         <li class="page-item"><a class="page-link" href="#">1</a></li>
+         <li class="page-item active"><a class="page-link" href="#">2</a></li>
+         <li class="page-item"><a class="page-link" href="#">3</a></li>
+         <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </html>
