@@ -151,8 +151,8 @@ public class UserRepositoryImpl implements UserRepository {
 
 			//Set all user posts
 			user.setPersonalPosts(postRepository.getUserPostsInRange(username, 0, -1));
-			user.setFollowingPosts(postRepository.getUserPostsInRange(username, 0, -1));
-			user.setPersAndFolPosts(postRepository.getUserPostsInRange(username, 0, -1));
+			user.setFollowingPosts(postRepository.prepareFollowingPosts(username));
+			user.setPersAndFolPosts(postRepository.preparePersonalAndFollowingPosts(username));
 
 		} else
 			user = null;
@@ -171,7 +171,6 @@ public class UserRepositoryImpl implements UserRepository {
 			srt_setOps.add(currentFolows, inspectedUser.getUsername());
 			srt_setOps.add(inspectedFolowers, currentUser.getUsername());
 		}
-		//TODO: rebuild timeline
 	}
 
 	@Override

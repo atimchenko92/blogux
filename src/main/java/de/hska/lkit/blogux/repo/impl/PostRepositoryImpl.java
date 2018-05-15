@@ -1,6 +1,6 @@
 package de.hska.lkit.blogux.repo.impl;
 
-
+import java.util.HashMap;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,12 +96,6 @@ public class PostRepositoryImpl implements PostRepository {
 		srt_listOps = stringRedisTemplate.opsForList();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * hska.iwi.vslab.repo.UserRepository#saveUser(hska.iwi.vslab.model.User)
-	 */
 	@Override
 	public void savePost(Post post) {
 		// generate a unique id
@@ -176,18 +170,40 @@ public class PostRepositoryImpl implements PostRepository {
 	}
 
 	@Override
-	public List<Post> getUsersPostsInRange(Set<String> usernames, long start, long end) {
-		//TODO: Better Sorted list... and comporator in Post Class
-		List<Post> postsList = new ArrayList<>();
-		for (String username : usernames) {
-			postsList.addAll(getUserPostsInRange(username, start, end));
-		}
-		return postsList;
+	public Map<String, Post> getAllPosts() {
+		return rt_hashOps.entries(KEY_HASH_ALL_POSTS);
 	}
 
 	@Override
-	public Map<String, Post> getAllPosts() {
-		return rt_hashOps.entries(KEY_HASH_ALL_POSTS);
+	public List<Post> prepareFollowingPosts(String username) {
+		Set<String> userList = srt_setOps.members("user:" + username + ":follows");
+		return performResolutionForUsers(username, userList);
+	}
+
+	@Override
+	public List<Post> preparePersonalAndFollowingPosts(String username) {
+		Set<String> userList = srt_setOps.members("user:" + username + ":follows");
+		userList.add(username);
+		return performResolutionForUsers(username, userList);
+	}
+
+	private List<Post> performResolutionForUsers(String username, Set<String> userList){
+		List<Post> resList = new ArrayList<>();
+		HashMap<String, Post> postSet = new HashMap<>();
+
+		for (String followUser : userList) {
+			for (Post curPost : getUserPostsInRange(followUser, 0, -1)) {
+				postSet.put(curPost.getId(), curPost);
+			}
+		}
+
+		List<Post> glPosts = getGlobalPostsInRange(0, -1);
+		for (Post glPost : glPosts) {
+			if (postSet.containsKey(glPost.getId())) {
+				resList.add(glPost);
+			}
+		}
+		return resList;
 	}
 
 }
