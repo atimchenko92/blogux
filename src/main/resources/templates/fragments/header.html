@@ -56,13 +56,19 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
                 <a th:class="${home.activetab.equals('timeline-meandfollows')} ? ('nav-item nav-link active') : ('nav-item nav-link')" th:href="@{/(action='timeline-meandfollows')}">My and Follows Posts
-                  <span class="badge badge-pill bg-dark align-text-bottom">0</span>
+                  <span class="badge badge-pill bg-dark align-text-bottom">
+                    <!--<th:block th:utext="${home.isself} ? (${home.getCurrentUser().getNumberOfMyAndFollPosts()}) : (${user.getNumberOfMyAndFollPosts()})"/>-->0
+                  </span>
                 </a>
-                <a th:class="${home.activetab.equals('timeline-my')} ? ('nav-item nav-link active') : ('nav-item nav-link')" th:href="@{/(action='timeline-my')}">My Posts
-                  <span class="badge badge-pill bg-dark align-text-bottom">0</span>
+                <a th:class="${home.activetab.equals('timeline-myposts')} ? ('nav-item nav-link active') : ('nav-item nav-link')" th:href="@{/(action='timeline-myposts')}">My Posts
+                  <span class="badge badge-pill bg-dark align-text-bottom">
+                    <!--<th:block th:utext="${home.isself} ? (${home.getCurrentUser().getPersonalPosts().size()}) : (${user.getPersonalPosts().size()})"/>-->0
+                  </span>
                 </a>
                 <a th:class="${home.activetab.equals('timeline-myfollows')} ? ('nav-item nav-link active') : ('nav-item nav-link')" th:href="@{/(action='timeline-myfollows')}">Follows Posts
-                  <span class="badge badge-pill bg-dark align-text-bottom">0</span>
+                  <span class="badge badge-pill bg-dark align-text-bottom">
+                    <!--<th:block th:utext="${home.isself} ? (${home.getCurrentUser().getFollowingPosts().size()}) : (${user.getFollowingPosts().size()})"/>-->0
+                  </span>
                 </a>
               </div>
             </div>

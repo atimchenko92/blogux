@@ -137,4 +137,8 @@ public class User implements Serializable {
   public void getUnfollowed(User user) {
     this.followers.remove(user.getUsername());
   }
+
+  public int getNumberOfMyAndFollPosts() {
+    return this.personalPosts.size() + this.followingPosts.size();
+  }
 }

@@ -1,5 +1,7 @@
+
 package de.hska.lkit.blogux.controller;
 
+import java.util.TreeSet;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
 import java.util.List;
@@ -146,7 +148,7 @@ public class HomeController {
     return "main_template";
   }
 
-  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=timeline-my")
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=timeline-myposts")
   public String showMyPosts(@ModelAttribute Home home, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
     List<Post> plist = postRepository.getUserPostsInRange(currentUser.getUsername() ,0, -1);
@@ -155,7 +157,34 @@ public class HomeController {
     home.setActivetab("timeline-my");
     home.setIsself(true);
 
-    return "main_template";
+    return "redirect:/";
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=timeline-myfollows")
+  public String showMyFollowsPosts(@ModelAttribute Home home, Model model, HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    List<Post> plist = postRepository.getUsersPostsInRange(currentUser.getFollows() ,0, -1);
+    model.addAttribute("plist", plist);
+    home.setCurrentUser(currentUser);
+    home.setActivetab("timeline-myfollows");
+    home.setIsself(true);
+
+    return "redirect:/";
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=timeline-meandfollows")
+  public String showMyAndFollowsPosts(@ModelAttribute Home home, Model model, HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    Set<String> meandfollowsnames = new TreeSet<String>();
+    meandfollowsnames.add(currentUser.getUsername());
+    meandfollowsnames.addAll(currentUser.getFollows());
+    List<Post> plist = postRepository.getUsersPostsInRange(meandfollowsnames ,0, -1);
+    model.addAttribute("plist", plist);
+    home.setCurrentUser(currentUser);
+    home.setActivetab("timeline-meandfollows");
+    home.setIsself(true);
+
+    return "redirect:/";
   }
 
 }

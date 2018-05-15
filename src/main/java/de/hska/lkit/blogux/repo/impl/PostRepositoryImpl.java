@@ -1,7 +1,7 @@
 package de.hska.lkit.blogux.repo.impl;
 
 
-
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -173,6 +173,16 @@ public class PostRepositoryImpl implements PostRepository {
 			postList.add(getPost(postId));
 		}
 		return postList;
+	}
+
+	@Override
+	public List<Post> getUsersPostsInRange(Set<String> usernames, long start, long end) {
+		//TODO: Better Sorted list... and comporator in Post Class
+		List<Post> postsList = new ArrayList<>();
+		for (String username : usernames) {
+			postsList.addAll(getUserPostsInRange(username, start, end));
+		}
+		return postsList;
 	}
 
 	@Override
