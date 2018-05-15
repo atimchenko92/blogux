@@ -146,4 +146,16 @@ public class HomeController {
     return "main_template";
   }
 
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=timeline-my")
+  public String showMyPosts(@ModelAttribute Home home, Model model, HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    List<Post> plist = postRepository.getUserPostsInRange(currentUser.getUsername() ,0, -1);
+    model.addAttribute("plist", plist);
+    home.setCurrentUser(currentUser);
+    home.setActivetab("timeline-my");
+    home.setIsself(true);
+
+    return "main_template";
+  }
+
 }
