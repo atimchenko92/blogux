@@ -42,7 +42,7 @@ public class HomeController {
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     model.addAttribute("post", post != null ? post : new Post());
-    model.addAttribute("plist", currentUser.getPersonalPosts());
+    model.addAttribute("plist", currentUser.getPersAndFolPosts());
 
     home.setCurrentUser(currentUser);
 
@@ -149,42 +149,33 @@ public class HomeController {
   }
 
   @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=timeline-myposts")
-  public String showMyPosts(@ModelAttribute Home home, Model model, HttpServletRequest req) {
+  public String showMyPosts(@ModelAttribute Home home, @ModelAttribute Post post, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
-    List<Post> plist = postRepository.getUserPostsInRange(currentUser.getUsername() ,0, -1);
-    model.addAttribute("plist", plist);
+    model.addAttribute("plist", currentUser.getPersonalPosts());
+    model.addAttribute("user", currentUser);
+    model.addAttribute("home", home != null ? home : new Home());
+    model.addAttribute("post", post != null ? post : new Post());
+
     home.setCurrentUser(currentUser);
-    home.setActivetab("timeline-my");
+    home.setActivetab("timeline-myposts");
     home.setIsself(true);
 
-    return "redirect:/";
+    return "main_template";
   }
 
   @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=timeline-myfollows")
-  public String showMyFollowsPosts(@ModelAttribute Home home, Model model, HttpServletRequest req) {
+  public String showMyFollowsPosts(@ModelAttribute Home home, @ModelAttribute Post post, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
-    List<Post> plist = postRepository.getUsersPostsInRange(currentUser.getFollows() ,0, -1);
-    model.addAttribute("plist", plist);
+    model.addAttribute("plist", currentUser.getFollowingPosts());
+    model.addAttribute("user", currentUser);
+    model.addAttribute("home", home != null ? home : new Home());
+    model.addAttribute("post", post != null ? post : new Post());
+
     home.setCurrentUser(currentUser);
     home.setActivetab("timeline-myfollows");
     home.setIsself(true);
 
-    return "redirect:/";
-  }
-
-  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=timeline-meandfollows")
-  public String showMyAndFollowsPosts(@ModelAttribute Home home, Model model, HttpServletRequest req) {
-    User currentUser = (User) req.getAttribute("currentUser");
-    Set<String> meandfollowsnames = new TreeSet<String>();
-    meandfollowsnames.add(currentUser.getUsername());
-    meandfollowsnames.addAll(currentUser.getFollows());
-    List<Post> plist = postRepository.getUsersPostsInRange(meandfollowsnames ,0, -1);
-    model.addAttribute("plist", plist);
-    home.setCurrentUser(currentUser);
-    home.setActivetab("timeline-meandfollows");
-    home.setIsself(true);
-
-    return "redirect:/";
+    return "main_template";
   }
 
 }

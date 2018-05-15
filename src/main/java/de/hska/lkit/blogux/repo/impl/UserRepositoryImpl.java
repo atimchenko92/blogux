@@ -151,7 +151,8 @@ public class UserRepositoryImpl implements UserRepository {
 
 			//Set all user posts
 			user.setPersonalPosts(postRepository.getUserPostsInRange(username, 0, -1));
-			//TODO: Set all following posts
+			user.setFollowingPosts(postRepository.getUserPostsInRange(username, 0, -1));
+			user.setPersAndFolPosts(postRepository.getUserPostsInRange(username, 0, -1));
 
 		} else
 			user = null;

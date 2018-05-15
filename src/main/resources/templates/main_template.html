@@ -25,8 +25,8 @@
     </div>
 
     <div class="container">
-      <th:block th:switch="${home.activetab}">
-        <div th:case="timeline-my">
+      <th:block th:switch="${home.activetab.matches('timeline-my.*')} ">
+        <div th:case="true">
           <!--/*/ <th:block th:include="fragments/profile :: profile"></th:block> /*/-->
           <div class=timeline-my-cont id="contentright">
             <th:block th:switch="${home.isself}">
@@ -35,8 +35,9 @@
               </div>
             </th:block>
             <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
-          </div>
         </div>
+      </th:block>
+      <th:block th:switch="${home.activetab}">
         <div th:case="timeline-gl">
           <div class=timeline-my-cont >
             <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->

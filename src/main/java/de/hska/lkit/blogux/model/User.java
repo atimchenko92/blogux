@@ -24,6 +24,7 @@ public class User implements Serializable {
 
   private List<Post> personalPosts;
   private List<Post> followingPosts;
+  private List<Post> persAndFollowingPosts;
 
   public User() {
 
@@ -106,12 +107,20 @@ public class User implements Serializable {
     this.followingPosts = postsList;
   }
 
+  public void setPersAndFolPosts(List<Post> postsList){
+    this.persAndFollowingPosts = postsList;
+  }
+
   public List<Post> getPersonalPosts() {
     return personalPosts;
   }
 
   public List<Post> getFollowingPosts() {
     return followingPosts;
+  }
+
+  public List<Post> getPersAndFolPosts(){
+    return persAndFollowingPosts;
   }
 
   public boolean amIFollow(String name){
@@ -136,9 +145,5 @@ public class User implements Serializable {
 
   public void getUnfollowed(User user) {
     this.followers.remove(user.getUsername());
-  }
-
-  public int getNumberOfMyAndFollPosts() {
-    return this.personalPosts.size() + this.followingPosts.size();
   }
 }
