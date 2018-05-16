@@ -36,6 +36,8 @@ public class UserRepositoryImpl implements UserRepository {
 
 	private static final String KEY_PREFIX_USER = "user:";
 
+	private static final String KEY_SEARCH_SET = "search:set";
+
 	private RedisAtomicLong userid;
 
 	/**
@@ -62,6 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
 	 * zset operations for stringRedisTemplate
 	 */
 	private ZSetOperations<String, String> srt_zSetOps;
+
 	/**
 	* Value operations
 	**/
@@ -111,6 +114,11 @@ public class UserRepositoryImpl implements UserRepository {
 		User newUser = new User(formular.getName(), formular.getPwd());
 		newUser.setId(id);
 		rt_hashOps.put(KEY_HASH_ALL_USERS, key, newUser);
+
+		//for case insentive searching reason
+		String username = formular.getName();
+		srt_setOps.add("find:set:" + username.toLowerCase(), username);
+		srt_zSetOps.add(KEY_SEARCH_SET, username.toLowerCase(), 0);
 	}
 
 	@Override
@@ -248,16 +256,16 @@ public class UserRepositoryImpl implements UserRepository {
 		} else {
 			// search for user with pattern
 
-			char[] chars = pattern.toCharArray();
-			System.out.println("Pattern search");
-			System.out.println("Before:" + chars[pattern.length() - 1]);
+			char[] chars = pattern.toLowerCase().toCharArray();
 			chars[pattern.length() - 1] = (char) (chars[pattern.length() - 1] + 1);
-			System.out.println("After:" + chars[pattern.length() - 1]);
 			String searchto = new String(chars);
 
-			setResult = srt_zSetOps.rangeByLex(KEY_ZSET_ALL_USERNAMES, Range.range().gte(pattern).lt(searchto));
+			Set<String> bridgeResult = new HashSet<>();
+			bridgeResult.addAll(srt_zSetOps.rangeByLex(KEY_SEARCH_SET, Range.range().gte(pattern).lt(searchto)));
+			for (String iterStr : bridgeResult) {
+				setResult.addAll(srt_setOps.members("find:set:" + iterStr));
+			}
 		}
-
 		return setResult;
 	}
 
