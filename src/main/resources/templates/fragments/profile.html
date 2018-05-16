@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <div th:fragment="profile">
-    <div class="card" id="contentleft">
-      <img class="card-img-top" th:src="@{/images/placeholder.png}" alt="Card image cap">
+    <div class="card">
+      <img class="card-img-top" th:src="@{/images/placeholder.png}" width="45" alt="Card image cap">
       <div class="card-body">
 
         <div th:if="${#strings.isEmpty(user.firstname)} eq false">

@@ -20,48 +20,69 @@
   </head>
 
   <body class="bg-light">
-    <div class=header_container>
-      <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-    </div>
-
-    <div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div class="container-fluid">
       <th:block th:switch="${home.activetab.matches('timeline-my.*')} ">
         <div th:case="true">
-          <!--/*/ <th:block th:include="fragments/profile :: profile"></th:block> /*/-->
-          <div class=timeline-my-cont id="contentright">
             <th:block th:switch="${home.isself} and ${!home.activetab.equals('timeline-myfollows')}">
               <div th:case="true">
-                <!--/*/ <th:block th:include="fragments/newpost :: newpost"></th:block> /*/-->
+                <div class="row">
+                  <div class="col-xs-3 col-md-3">
+                    <!--/*/ <th:block th:include="fragments/profile :: profile"></th:block> /*/-->
+                  </div>
+                  <div class="col-xs-9 col-md-9">
+                    <div class="row">
+                    <!--/*/ <th:block th:include="fragments/newpost :: newpost"></th:block> /*/-->
+                    </div>
+                    <div class="row">
+                    <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div th:case="false">
+                <div class="row">
+                  <div class="col-xs-3 col-md-3">
+                    <!--/*/ <th:block th:include="fragments/profile :: profile"></th:block> /*/-->
+                  </div>
+                  <div class="col-xs-9 col-md-9">
+                    <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
+                  </div>
+                </div>
               </div>
             </th:block>
-            <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
+          </div>
         </div>
       </th:block>
       <th:block th:switch="${home.activetab}">
         <div th:case="timeline-gl">
-          <div class=timeline-my-cont >
+          <div class="row">
             <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
           </div>
         </div>
         <div th:case="search">
-          <div class=search-cont>
-          <!--/*/ <th:block th:include="fragments/userlist :: userlist"></th:block> /*/-->
+          <div class="row">
+            <!--/*/ <th:block th:include="fragments/userlist :: userlist"></th:block> /*/-->
           </div>
         </div>
         <div th:case="settings">
-          <!--/*/ <th:block th:include="fragments/profile :: profile"></th:block> /*/-->
-          <div class=settings-cont id="contentright">
-          <!--/*/ <th:block th:include="fragments/settings :: settings"></th:block> /*/-->
+          <div class="row">
+            <div class="col-xs-3 col-md-3">
+              <!--/*/ <th:block th:include="fragments/profile :: profile"></th:block> /*/-->
+            </div>
+            <div class="col-xs-9 col-md-9">
+              <!--/*/ <th:block th:include="fragments/settings :: settings"></th:block> /*/-->
+            </div>
           </div>
         </div>
         <div th:case="follows">
-          <div class=follows-cont>
-          <!--/*/ <th:block th:include="fragments/userlist :: userlist"></th:block> /*/-->
+          <div class="row">
+            <!--/*/ <th:block th:include="fragments/userlist :: userlist"></th:block> /*/-->
           </div>
         </div>
         <div th:case="followers">
-          <div class=followers-cont>
-          <!--/*/ <th:block th:include="fragments/userlist :: userlist"></th:block> /*/-->
+          <div class="row">
+            <!--/*/ <th:block th:include="fragments/userlist :: userlist"></th:block> /*/-->
           </div>
         </div>
       </th:block>
@@ -70,6 +91,15 @@
     <!-- Bootstrap core JavaScript
       ================================================== -->
   	<!-- Placed at the end of the document so the pages load faster -->
+    <script>
+    $(function () {
+      'use strict'
+
+      $('[data-toggle="offcanvas"]').on('click', function () {
+        $('.offcanvas-collapse').toggleClass('open')
+      })
+    })
+    </script>
 
 
   </body>
