@@ -121,9 +121,13 @@ public class UserRepositoryImpl implements UserRepository {
 		//TODO If pwd change
 		oldUser.setFirstname(user.getFirstname());
 		oldUser.setLastname(user.getLastname());
+		oldUser.setMail(user.getMail());
+		oldUser.setBio(user.getBio());
 		//srt_hashOps.put(key, "password", formular.getPwd());
 		srt_hashOps.put(key, "firstname", oldUser.getFirstname());
 		srt_hashOps.put(key, "lastname", oldUser.getLastname());
+		srt_hashOps.put(key, "mail", oldUser.getMail());
+		srt_hashOps.put(key, "bio", oldUser.getBio());
 		rt_hashOps.put(KEY_HASH_ALL_USERS, key, oldUser);
 	}
 
@@ -146,6 +150,8 @@ public class UserRepositoryImpl implements UserRepository {
 			user.setLastname(srt_hashOps.get(key, "lastname"));
 			user.setUsername(srt_hashOps.get(key, "username"));
 			user.setPassword(srt_hashOps.get(key, "password"));
+			user.setMail(srt_hashOps.get(key, "mail"));
+			user.setBio(srt_hashOps.get(key, "bio"));
 			user.setFollows(getFollows(username));
 			user.setFollowers(getFollowers(username));
 

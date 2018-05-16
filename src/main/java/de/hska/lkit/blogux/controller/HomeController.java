@@ -1,7 +1,6 @@
 
 package de.hska.lkit.blogux.controller;
 
-import java.util.TreeSet;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
 import java.util.List;
@@ -52,8 +51,11 @@ public class HomeController {
   @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=toSettings")
   public String showSettings(@ModelAttribute Home home, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
+
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
+    model.addAttribute("userProfile", currentUser);
+
     home.setActivetab("settings");
     home.setCurrentUser(currentUser);
 
@@ -61,17 +63,23 @@ public class HomeController {
   }
 
   @RequestMapping(value = "/", method = RequestMethod.POST, params = "action=saveSettings")
-  public String saveSettings(@ModelAttribute User user, @ModelAttribute Home home, Model model,
+  public String saveSettings(@ModelAttribute User userProfile, @ModelAttribute Home home, Model model,
       HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
+    System.out.println("In save settings");
 
-    currentUser.setFirstname(user.getFirstname());
-    currentUser.setLastname(user.getLastname());
+    currentUser.setFirstname(userProfile.getFirstname());
+    currentUser.setLastname(userProfile.getLastname());
+    currentUser.setMail(userProfile.getMail());
+    currentUser.setBio(userProfile.getBio());
+    
     userRepository.saveUser(currentUser);
 
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
+
     home.setActivetab("timeline-my");
+    home.setCurrentUser(currentUser);
 
     return "redirect:/";
   }

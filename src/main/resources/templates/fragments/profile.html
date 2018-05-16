@@ -4,8 +4,20 @@
     <div class="card" id="contentleft">
       <img class="card-img-top" th:src="@{/images/placeholder.png}" alt="Card image cap">
       <div class="card-body">
-        <h5 th:text="${user.username}" class="card-title"></h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+
+        <div th:if="${#strings.isEmpty(user.firstname)} eq false">
+          <h3 class="font-weight-bold" th:text="${user.firstname} + ' ' + ${user.lastname}"></h3>
+        </div>
+        <h6 th:text="'@'+${user.username}" class="card-title"></h6>
+        <hr />
+        <p th:class="${#strings.isEmpty(user.bio)} ? 'card-text font-italic' : 'card-text'"
+            th:text="${#strings.isEmpty(user.bio)} ? 'No information yet...' : ${user.bio}">
+        </p>
+
+        <div th:if="${#strings.isEmpty(user.mail)} eq false">
+          <hr />
+          <h6 th:text="'mail: '+ ${user.mail}"></h6>
+        </div>
         <th:block th:switch="${home.isself}">
           <div th:case="false">
             <a th:object="${user}" th:href="@{/user/} + ${user.username} + @{'?action=followUnfollow'}"

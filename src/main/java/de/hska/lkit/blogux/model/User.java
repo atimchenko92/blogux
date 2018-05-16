@@ -18,6 +18,8 @@ public class User implements Serializable {
 
   private String firstname;
   private String lastname;
+  private String mail;
+  private String bio;
 
   private Set<String> followers;
   private Set<String> follows;
@@ -74,6 +76,23 @@ public class User implements Serializable {
   public void setLastname(String lastname) {
     this.lastname = lastname;
   }
+
+  public String getMail() {
+    return mail;
+  }
+
+  public void setMail(String mail) {
+    this.mail = mail;
+  }
+
+  public String getBio() {
+    return bio;
+  }
+
+  public void setBio(String bio) {
+    this.bio = bio;
+  }
+
 
   public void setPassword(String password) {
     this.password = password;

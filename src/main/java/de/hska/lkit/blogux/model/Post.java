@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.model;
 
+import java.util.Date;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -19,23 +20,13 @@ public class Post implements Serializable{
   private String text;
 
   public Post() {
-    this.datetime = getFormattedDatetime();
   }
 
   public Post(String author, String text) {
     setAuthor(author);
     setText(text);
-    this.datetime = getFormattedDatetime();
+    this.datetime = new SimpleDateFormat("d MMM yyyy HH:mm:ss").format(new java.util.Date());
   }
-
-/*
-  public Post(String id, User author, LocalDateTime datetime, String text) {
-    this.id = id;
-    this.author = author;
-    this.datetime = datetime;
-    this.text = text;
-  }
-  */
 
   public String getDatetime() {
     return this.datetime;
@@ -69,8 +60,5 @@ public class Post implements Serializable{
     return text;
   }
 
-  private String getFormattedDatetime() {
-    return new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss").format(new java.util.Date());
-  }
 
 }

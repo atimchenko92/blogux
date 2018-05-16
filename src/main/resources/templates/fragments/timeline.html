@@ -8,7 +8,7 @@
         <th:block th:each="p : ${plist}">
           <div class="media text-muted pt-3">
             <img class="mb-4" th:src="@{/images/placeholder.png}" alt="" width="45" height="45">
-            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
               <strong class="d-block text-gray-dark">
                 <a style="text-decoration:none" th:href="(@{/user/} + ${p.getAuthor()})">
                   <th:block th:utext="'@'+${p.getAuthor()}"/>
@@ -16,6 +16,7 @@
               </strong>
               <th:block th:utext="${p.getText()}"/>
             </p>
+            <p class="text-right font-weight-light" th:text="${p.getDatetime()}"></p>
           </div>
         </th:block>
       </div>
@@ -24,9 +25,7 @@
           <div class="container">
             <div th:if="(${home.activetab} eq 'timeline-my') or (${home.activetab} eq 'timeline-myposts')">
               <h1 class="display-4">Nothing to feed from</h1>
-              <div th:if="${home.isself}">
-                <p class="lead">Take a chance and publish a post :)</p>
-              </div>
+              <p class="lead" th:text="${home.isself} ? 'Take a chance and publish a post :)' : 'User hasn\'t published a post yet :('"></p>
             </div>
             <div th:if="${home.activetab} eq 'timeline-myfollows'">
               <h1 class="display-4">Nothing to feed from</h1>
