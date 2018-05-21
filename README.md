@@ -59,7 +59,7 @@ TODO: Add additional notes about how to deploy this on a live system
 ## Authors
 
 Alexandr Timchenko  
-Aziz Shaumarov  
+Asis Schaumarow  
 Iurii Luchnikov  
 
 See also the list of [contributors](https://github.com/atimchenko92/blogux/contributors) who participated in this project.
