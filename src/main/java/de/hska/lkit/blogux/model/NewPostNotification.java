@@ -2,16 +2,22 @@ package de.hska.lkit.blogux.model;
 
 public class NewPostNotification {
 
-    private String content;
+    private String sender;
+    private String body;
 
     public NewPostNotification() {
     }
 
-    public NewPostNotification(String content) {
-        this.content = content;
+    public NewPostNotification(String sender, String body) {
+        this.sender = sender;
+        this.body = body;
     }
 
-    public String getContent() {
-        return content;
+    public String getSender() {
+        return sender;
+    }
+
+    public String getBody() {
+        return body;
     }
 }
