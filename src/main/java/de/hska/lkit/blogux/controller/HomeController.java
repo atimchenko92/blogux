@@ -72,7 +72,7 @@ public class HomeController {
     currentUser.setLastname(userProfile.getLastname());
     currentUser.setMail(userProfile.getMail());
     currentUser.setBio(userProfile.getBio());
-    
+
     userRepository.saveUser(currentUser);
 
     model.addAttribute("user", currentUser);

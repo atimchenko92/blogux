@@ -3,7 +3,6 @@ package de.hska.lkit.blogux.controller;
 import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.concurrent.TimeUnit;
 import de.hska.lkit.blogux.repo.SessionRepository;
 import javax.servlet.http.HttpServletResponse;
@@ -89,7 +88,7 @@ public class LoginController {
 	* Perform login
 	**/
 	@RequestMapping(value = "/login",  method = RequestMethod.POST, params="action=login")
-	public String logIn(@ModelAttribute Login login, HttpServletResponse response, Model model, RedirectAttributes rAttr) {
+	public String logIn(@ModelAttribute Login login, HttpServletResponse response, Model model) {
 		if(sessionRepository.checkAuth(login.getName(), login.getPwd())){
 			System.out.println("In login");
 			String token = sessionRepository.addAuthTokens(login.getName(), TIMEOUT.getSeconds(), TimeUnit.MINUTES);
