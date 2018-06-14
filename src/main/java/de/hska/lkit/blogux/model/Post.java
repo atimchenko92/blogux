@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.model;
 
+import de.hska.lkit.blogux.util.XSSSecurityConstraint;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,7 @@ public class Post implements Serializable{
   private String datetime;
 
   @Size(min=1, max=140, message="Post should contain from 1 to 140 characters")
+  @XSSSecurityConstraint
   private String text;
 
   public Post() {

@@ -17,7 +17,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    String[] myPathPatterns = new String[]{"/","/user/**", "/logout"};
+    String[] myPathPatterns = new String[]{"/","/user/**", "/logout","/settings"};
     registry.addInterceptor(bloguxCookieInterceptor()).addPathPatterns(myPathPatterns);
   }
 }

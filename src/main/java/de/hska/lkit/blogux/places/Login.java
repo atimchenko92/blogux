@@ -1,12 +1,16 @@
 package de.hska.lkit.blogux.places;
 
+import javax.validation.constraints.NotEmpty;
+import de.hska.lkit.blogux.util.XSSSecurityConstraint;
 import de.hska.lkit.blogux.util.UserExistsConstraint;
 
 public class Login {
 
   @UserExistsConstraint
+  @XSSSecurityConstraint
+  @NotEmpty
   private String name;
-  
+
   private String pwd;
   private String pwdConfirm;
   private String content;

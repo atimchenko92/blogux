@@ -41,7 +41,7 @@
         </form>
         <ul class="navbar-nav mr-auto">
           <li th:class="${home.activetab.equals('settings' )} ? ('nav-item active') : ('nav-item')">
-            <a th:href="@{/(action='toSettings')}" class="nav-link" >Settings</a>
+            <a th:href="@{/settings}" class="nav-link" >Settings</a>
           </li>
           <li class="nav-item">
             <a th:href="@{/logout}" class="nav-link">Logout</a>

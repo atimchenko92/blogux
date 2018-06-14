@@ -1,6 +1,7 @@
 
 package de.hska.lkit.blogux.controller;
 
+import de.hska.lkit.blogux.places.Settings;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
 import java.util.List;
@@ -48,13 +49,14 @@ public class HomeController {
     return "main_template";
   }
 
-  @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=toSettings")
+  @RequestMapping(value = "/settings", method = RequestMethod.GET)
   public String showSettings(@ModelAttribute Home home, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
+    Settings settings = new Settings(currentUser);
 
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
-    model.addAttribute("userProfile", currentUser);
+    model.addAttribute("settings", settings);
 
     home.setActivetab("settings");
     home.setCurrentUser(currentUser);
@@ -62,26 +64,33 @@ public class HomeController {
     return "main_template";
   }
 
-  @RequestMapping(value = "/", method = RequestMethod.POST, params = "action=saveSettings")
-  public String saveSettings(@ModelAttribute User userProfile, @ModelAttribute Home home, Model model,
-      HttpServletRequest req) {
+  @RequestMapping(value = "/settings", method = RequestMethod.POST, params="action=saveSettings")
+  public String saveSettings(@Valid @ModelAttribute Settings settings,
+    BindingResult bindingResult,
+    @ModelAttribute Home home,
+    Model model,
+    HttpServletRequest req) {
+
     User currentUser = (User) req.getAttribute("currentUser");
-    System.out.println("In save settings");
-
-    currentUser.setFirstname(userProfile.getFirstname());
-    currentUser.setLastname(userProfile.getLastname());
-    currentUser.setMail(userProfile.getMail());
-    currentUser.setBio(userProfile.getBio());
-
-    userRepository.saveUser(currentUser);
 
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
+    model.addAttribute("settings", settings);
 
-    home.setActivetab("timeline-my");
     home.setCurrentUser(currentUser);
+    if (!bindingResult.hasErrors()){
+      currentUser.setFirstname(settings.getFirstName());
+      currentUser.setLastname(settings.getLastName());
+      currentUser.setMail(settings.getMail());
+      currentUser.setBio(settings.getBio());
+      home.setCurrentUser(currentUser);
 
-    return "redirect:/";
+      userRepository.saveUser(currentUser);
+    }
+
+    home.setActivetab("settings");
+
+    return "main_template";
   }
 
   @RequestMapping(value = "/", method = RequestMethod.POST, params = "action=sendPost")
