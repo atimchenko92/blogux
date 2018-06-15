@@ -1,7 +1,5 @@
-
 package de.hska.lkit.blogux.controller;
 
-import de.hska.lkit.blogux.places.Settings;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
 import java.util.List;
@@ -45,50 +43,6 @@ public class HomeController {
     model.addAttribute("plist", currentUser.getPersAndFolPosts());
 
     home.setCurrentUser(currentUser);
-
-    return "main_template";
-  }
-
-  @RequestMapping(value = "/settings", method = RequestMethod.GET)
-  public String showSettings(@ModelAttribute Home home, Model model, HttpServletRequest req) {
-    User currentUser = (User) req.getAttribute("currentUser");
-    Settings settings = new Settings(currentUser);
-
-    model.addAttribute("user", currentUser);
-    model.addAttribute("home", home != null ? home : new Home());
-    model.addAttribute("settings", settings);
-
-    home.setActivetab("settings");
-    home.setCurrentUser(currentUser);
-
-    return "main_template";
-  }
-
-  @RequestMapping(value = "/settings", method = RequestMethod.POST, params="action=saveSettings")
-  public String saveSettings(@Valid @ModelAttribute Settings settings,
-    BindingResult bindingResult,
-    @ModelAttribute Home home,
-    Model model,
-    HttpServletRequest req) {
-
-    User currentUser = (User) req.getAttribute("currentUser");
-
-    model.addAttribute("user", currentUser);
-    model.addAttribute("home", home != null ? home : new Home());
-    model.addAttribute("settings", settings);
-
-    home.setCurrentUser(currentUser);
-    if (!bindingResult.hasErrors()){
-      currentUser.setFirstname(settings.getFirstName());
-      currentUser.setLastname(settings.getLastName());
-      currentUser.setMail(settings.getMail());
-      currentUser.setBio(settings.getBio());
-      home.setCurrentUser(currentUser);
-
-      userRepository.saveUser(currentUser);
-    }
-
-    home.setActivetab("settings");
 
     return "main_template";
   }

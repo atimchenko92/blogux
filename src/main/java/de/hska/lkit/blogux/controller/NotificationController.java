@@ -15,7 +15,6 @@ public class NotificationController {
 
    @MessageMapping("/newpost")
    public void notify(NewPostMsg message) throws Exception {
-     System.out.println("Got new message from"+message.getName());
      template.convertAndSend("/topic/" + message.getName(),
       new NewPostNotification(message.getName(), message.getMsg()));
    }
