@@ -2,8 +2,8 @@ package de.hska.lkit.blogux.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import de.hska.lkit.blogux.model.NewPostMsg;
-import de.hska.lkit.blogux.model.NewPostNotification;
+import de.hska.lkit.blogux.socket.pojos.NewPostMsg;
+import de.hska.lkit.blogux.socket.pojos.NewPostNotification;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 

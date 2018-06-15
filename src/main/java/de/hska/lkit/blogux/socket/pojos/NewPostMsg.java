@@ -1,7 +1,7 @@
-package de.hska.lkit.blogux.model;
+package de.hska.lkit.blogux.socket.pojos;
 
 public class NewPostMsg {
-  
+
   private String name;
   private String msg;
 
@@ -9,24 +9,23 @@ public class NewPostMsg {
   }
 
   public NewPostMsg(String name, String msg) {
-      this.name = name;
-      this.msg = msg;
+    this.name = name;
+    this.msg = msg;
   }
 
   public String getName() {
-      return name;
+    return name;
   }
 
   public String getMsg() {
-      return msg;
+    return msg;
   }
 
   public void setName(String name) {
-      this.name = name;
+    this.name = name;
   }
 
   public void setMsg(String msg) {
-      this.msg = msg;
+    this.msg = msg;
   }
-
 }

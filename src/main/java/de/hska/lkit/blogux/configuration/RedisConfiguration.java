@@ -1,5 +1,12 @@
 package de.hska.lkit.blogux.configuration;
 
+import de.hska.lkit.blogux.pubsub.MessagePublisherImpl;
+import de.hska.lkit.blogux.pubsub.MessagePublisher;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import de.hska.lkit.blogux.pubsub.BloguxMessageSubscriber;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -29,12 +36,34 @@ public class RedisConfiguration {
 		return stringRedisTemplate;
 	}
 
-
 	@Bean(name = "redisTemplate")
 	public RedisTemplate<String, Object> getRedisTemplate() {
 		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
 		redisTemplate.setConnectionFactory(getConnectionFactory());
 		return redisTemplate;
+	}
+
+	@Bean
+	MessageListenerAdapter messageListener() {
+		return new MessageListenerAdapter(new BloguxMessageSubscriber());
+	}
+
+	@Bean
+	RedisMessageListenerContainer container() {
+		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+		container.setConnectionFactory(getConnectionFactory());
+		container.addMessageListener(messageListener(), topic());
+		return container;
+	}
+
+	@Bean
+	ChannelTopic topic() {
+		return new ChannelTopic("messageQueue");
+	}
+
+	@Bean
+	MessagePublisher redisPublisher() {
+    return new MessagePublisherImpl(getRedisTemplate(), topic());
 	}
 
 }

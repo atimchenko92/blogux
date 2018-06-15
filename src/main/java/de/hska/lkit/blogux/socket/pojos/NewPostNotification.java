@@ -1,7 +1,7 @@
-package de.hska.lkit.blogux.model;
+package de.hska.lkit.blogux.socket.pojos;
 
 public class NewPostNotification {
-  
+
   private String sender;
   private String body;
 
