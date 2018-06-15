@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <div th:fragment="timeline">
-    <div class="my-3 p-3 bg-white rounded box-shadow">
-
+    <div class="my-3 p-3 bg-white rounded box-shadow container-fluid">
       <div th:if="${plist.size()} gt '0'">
         <h6 class="border-bottom border-gray pb-2 mb-0">Recent posts</h6>
         <th:block th:each="p : ${plist}">

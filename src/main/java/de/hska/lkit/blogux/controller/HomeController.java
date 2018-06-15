@@ -100,8 +100,7 @@ public class HomeController {
     model.addAttribute("user", currentUser);
     model.addAttribute("post", post != null ? post : new Post());
     model.addAttribute("home", home != null ? home : new Home());
-    model.addAttribute("plist", currentUser.getPersonalPosts());
-
+    model.addAttribute("plist", currentUser.getPersAndFolPosts());
     home.setCurrentUser(currentUser);
     home.setIsself(true);
     home.setActivetab("timeline-my");

@@ -9,39 +9,5 @@
       </div>
       <button th:onclick="'sendSTOMP()'"name="action" value="sendPost" class="btn btn-primary btn-lg" type="submit">Publish</button>
     </form>
-
-    <script th:inline="javascript">
-      /*<![CDATA[*/
-      var stompClient = null;
-      connect();
-
-      function sendSTOMP() {
-        if (stompClient != null){
-         var currentUser = /*[[${home.currentUser.username}]]*/;
-         var currentMsg = $("#comment").val();
-         console.log(currentUser);
-
-         stompClient.send("/app/newpost", {}, JSON.stringify({'name': currentUser,
-           'msg': currentMsg}));
-        }
-      }
-
-      function connect() {
-        var followsSet = /*[[${home.currentUser.follows}]]*/;
-        var socket = new SockJS('/bloguxSocket');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-           console.log('Connected: ' + frame);
-           for (var i in followsSet) {
-             stompClient.subscribe('/topic/'+followsSet[i], function (notify) {
-                 //showGreeting(JSON.parse(greeting.body).content);
-                 alert("vam pismo ot "+JSON.parse(notify.body).sender);
-             });
-           }
-        });
-      }
-
-      /*]]>*/
-    </script>
   </div>
 </html>

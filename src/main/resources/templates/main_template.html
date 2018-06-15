@@ -19,6 +19,7 @@
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/offcanvas.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/blogux.css}" />
   </head>
 
   <body class="bg-light">
@@ -33,11 +34,13 @@
                     <!--/*/ <th:block th:include="fragments/profile :: profile"></th:block> /*/-->
                   </div>
                   <div class="col-xs-9 col-md-9">
-                    <div class="row">
-                    <!--/*/ <th:block th:include="fragments/newpost :: newpost"></th:block> /*/-->
-                    </div>
-                    <div class="row">
-                    <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
+                    <div class="container-fluid">
+                      <div class="row">
+                      <!--/*/ <th:block th:include="fragments/newpost :: newpost"></th:block> /*/-->
+                      </div>
+                      <div class="row">
+                      <!--/*/ <th:block th:include="fragments/timeline :: timeline"></th:block> /*/-->
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -89,6 +92,46 @@
         </div>
       </th:block>
     </div>
+
+    <th:block th:include="fragments/notificationBox :: notificationBox"></th:block>
+
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      var stompClient = null;
+      connect();
+
+      function sendSTOMP() {
+        if (stompClient != null){
+         var currentUser = /*[[${home.currentUser.username}]]*/;
+         var currentMsg = $("#comment").val();
+         console.log(currentUser);
+
+         stompClient.send("/app/newpost", {}, JSON.stringify({'name': currentUser,
+           'msg': currentMsg}));
+        }
+      }
+
+      function connect() {
+        var followsSet = /*[[${home.currentUser.follows}]]*/;
+        var socket = new SockJS('/bloguxSocket');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+           console.log('Connected: ' + frame);
+           for (var i in followsSet) {
+             stompClient.subscribe('/topic/'+followsSet[i], function (notify) {
+               var sender = JSON.parse(notify.body).sender;
+               var body = JSON.parse(notify.body).body;
+               var notif = "<div class='alert alert-warning alert-dismissible fade show' role='alert'><h4 class='alert-heading'><strong>@"+sender+"</strong> is buzzing...</h4>"+body+"<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
+               $('#notificationList').append( notif );
+             });
+           }
+        });
+      }
+
+      /*]]>*/
+    </script>
+
+
 
     <!-- Bootstrap core JavaScript
       ================================================== -->

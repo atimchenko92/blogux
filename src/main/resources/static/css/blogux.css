@@ -1,0 +1,12 @@
+.notificationBoxStyle{
+  position: fixed;
+  top: 10em;
+  z-index: 1070;
+  opacity: 255;
+}
+.onTop{
+  position: fixed;
+  top: 10em;
+  z-index: 1070;
+  opacity: 255;
+}
