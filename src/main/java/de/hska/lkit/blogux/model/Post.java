@@ -14,6 +14,7 @@ public class Post implements Serializable{
   private static final long serialVersionUID = 1L;
   private String id;
   private String author;
+  private String profilePicture;
   private String datetime;
 
   @Size(min=1, max=140, message="Post should contain from 1 to 140 characters")
@@ -43,6 +44,14 @@ public class Post implements Serializable{
 
   public String getId() {
     return id;
+  }
+
+  public void setProfilePicture(String profilePicture) {
+    this.profilePicture = profilePicture;
+  }
+
+  public String getProfilePicture() {
+    return profilePicture;
   }
 
   public void setAuthor(String author) {

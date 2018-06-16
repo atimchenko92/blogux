@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.model;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Set;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class User implements Serializable {
   private String lastname;
   private String mail;
   private String bio;
+  private String profilePicture;
 
   private Set<String> followers;
   private Set<String> follows;
@@ -47,6 +49,14 @@ public class User implements Serializable {
 
   public String getId() {
     return id;
+  }
+
+  public String getProfilePicture() {
+    return profilePicture;
+  }
+
+  public void setProfilePicture(String profilePicture) {
+    this.profilePicture = profilePicture;
   }
 
   public void setId(String id) {

@@ -2,7 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <div th:fragment="profile">
     <div class="card">
-      <img class="card-img-top" th:src="@{/images/placeholder.png}" width="45" alt="Card image cap">
+      <th:block th:switch="${#strings.isEmpty(user.profilePicture)}">
+        <div th:case="true">
+          <img class="card-img-top" th:src="@{/images/placeholder.png}" width="45" alt="Card image cap">
+        </div>
+        <div th:case="false">
+          <img class="card-img-top" th:src="@{${user.profilePicture}}" width="45" alt="Card image cap">
+        </div>
+      </th:block>
       <div class="card-body">
 
         <div th:if="${#strings.isEmpty(user.firstname)} eq false">

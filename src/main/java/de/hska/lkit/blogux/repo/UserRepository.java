@@ -11,6 +11,7 @@ public interface UserRepository {
 
 	public void createUser(Login user);
 	public void saveUser(User user);
+	public void saveProfilePic(User user);
 	public Map<String, User> getAllUsers();
 	public User getUser(String username);
 	public User getUserByCookie(HttpServletRequest req);

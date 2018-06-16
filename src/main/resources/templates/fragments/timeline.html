@@ -6,7 +6,15 @@
         <h6 class="border-bottom border-gray pb-2 mb-0">Recent posts</h6>
         <th:block th:each="p : ${plist}">
           <div class="media text-muted pt-3">
-            <img class="mb-4" th:src="@{/images/placeholder.png}" alt="" width="45" height="45">
+            <th:block th:switch="${#strings.isEmpty(p.profilePicture)}">
+              <div th:case="true">
+                <img class="mb-4" th:src="@{/images/placeholder.png}" alt="" width="45" height="45">
+              </div>
+              <div th:case="false">
+                <img class="mb-4" th:src="@{${p.profilePicture}}" alt="" width="45" height="45">
+              </div>
+            </th:block>
+
             <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
               <strong class="d-block text-gray-dark">
                 <a style="text-decoration:none" th:href="(@{/user/} + ${p.getAuthor()})">

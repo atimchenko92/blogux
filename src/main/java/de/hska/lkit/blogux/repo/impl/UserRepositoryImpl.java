@@ -140,6 +140,16 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
+	public void saveProfilePic(User user){
+		String key = KEY_PREFIX_USER + user.getUsername();
+		User oldUser = null;
+		oldUser = getUser(user.getUsername());
+		oldUser.setProfilePicture(user.getProfilePicture());
+		srt_hashOps.put(key, "profilePicture", oldUser.getProfilePicture());
+		rt_hashOps.put(KEY_HASH_ALL_USERS, key, oldUser);
+	}
+
+	@Override
 	public Map<String, User> getAllUsers() {
 		return rt_hashOps.entries(KEY_HASH_ALL_USERS);
 	}
@@ -160,6 +170,7 @@ public class UserRepositoryImpl implements UserRepository {
 			user.setPassword(srt_hashOps.get(key, "password"));
 			user.setMail(srt_hashOps.get(key, "mail"));
 			user.setBio(srt_hashOps.get(key, "bio"));
+			user.setProfilePicture(srt_hashOps.get(key, "profilePicture"));
 			user.setFollows(getFollows(username));
 			user.setFollowers(getFollowers(username));
 

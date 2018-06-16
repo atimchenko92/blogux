@@ -141,6 +141,7 @@ public class PostRepositoryImpl implements PostRepository {
 			post.setAuthor(srt_hashOps.get(key, "author"));
 			post.setDatetime(srt_hashOps.get(key, "datetime"));
 			post.setText(srt_hashOps.get(key, "text"));
+			post.setProfilePicture(srt_hashOps.get("user:"+post.getAuthor(), "profilePicture"));
 
 			return post;
 		}
