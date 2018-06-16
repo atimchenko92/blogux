@@ -74,6 +74,10 @@
           <div class="row">
             <div class="col-xs-3 col-md-3">
               <!--/*/ <th:block th:include="fragments/profile :: profile"></th:block> /*/-->
+              <form class="form-inline" th:action="@{/settings}" method="post" enctype="multipart/form-data" >
+                <input type="file" name="file" class="form-control-file">
+                <button name="action" value="uploadImg" class="btn btn-outline-secondary" type="submit">Upload</button>
+              </form>
             </div>
             <div class="col-xs-9 col-md-9">
               <!--/*/ <th:block th:include="fragments/settings :: settings"></th:block> /*/-->

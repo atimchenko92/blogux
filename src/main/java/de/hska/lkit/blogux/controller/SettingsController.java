@@ -92,9 +92,9 @@ public class SettingsController {
     model.addAttribute("settings", settings);
 
     home.setCurrentUser(currentUser);
+    home.setActivetab("settings");
 
     if (file.isEmpty()) {
-      System.out.println("Redirect!");
       return "redirect:/settings";
     }
     try {
@@ -108,11 +108,10 @@ public class SettingsController {
 
         userRepository.saveProfilePic(currentUser);
 
-    } catch (IOException e) {
-        e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return "redirect:/settings";
     }
-
-    home.setActivetab("settings");
 
     return "main_template";
   }

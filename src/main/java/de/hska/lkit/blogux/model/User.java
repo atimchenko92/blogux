@@ -1,6 +1,5 @@
 package de.hska.lkit.blogux.model;
 
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Set;
 import java.io.Serializable;

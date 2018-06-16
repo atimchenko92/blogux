@@ -25,18 +25,5 @@
       <button name="action" value="saveSettings"
        class="btn btn-lg btn-primary btn-block" type="submit">Save profile settings</button>
     </form>
-
-    <form th:action="@{/settings}" method="post"  enctype="multipart/form-data" >
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <button name="action" value="uploadImg" class="btn btn-outline-secondary" type="submit">Upload</button>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="file" class="custom-file-input" id="inputGroupFile03">
-          <label class="custom-file-label" for="inputGroupFile03">Choose image</label>
-        </div>
-      </div>
-    </form>
-
   </div>
 </html>
