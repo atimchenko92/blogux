@@ -124,7 +124,7 @@ public class User implements Serializable {
   }
 
   public void setFollowers(Set<String> followers) {
-    this.followers  = followers;
+    this.followers = followers;
   }
 
   public Set<String> getFollows() {

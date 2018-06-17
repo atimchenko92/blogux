@@ -1,9 +1,10 @@
 package de.hska.lkit.blogux.controller;
 
+import de.hska.lkit.blogux.util.BloguxUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
 import java.util.List;
-import java.util.Set;
 import de.hska.lkit.blogux.repo.PostRepository;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import de.hska.lkit.blogux.repo.UserRepository;
-
 /**
  * @author atimchenko
  *
@@ -24,13 +23,11 @@ import de.hska.lkit.blogux.repo.UserRepository;
 @Controller
 public class HomeController {
 
-  private final UserRepository userRepository;
   private final PostRepository postRepository;
 
   @Autowired
-  public HomeController(UserRepository userRepository, PostRepository postRepository) {
+  public HomeController(PostRepository postRepository) {
     super();
-    this.userRepository = userRepository;
     this.postRepository = postRepository;
   }
 
@@ -40,15 +37,33 @@ public class HomeController {
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     model.addAttribute("post", post != null ? post : new Post());
-    model.addAttribute("plist", currentUser.getPersAndFolPosts());
 
+    model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(0, currentUser.getPersAndFolPosts()));
+    home.setCurrentUser(currentUser);
+
+    return "main_template";
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = { "page" })
+  public String showHomePaged(@ModelAttribute Home home, @ModelAttribute Post post,
+      @RequestParam(value = "page") int page, Model model, HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    if (page == 0)
+      return "redirect:/";
+
+    model.addAttribute("user", currentUser);
+    model.addAttribute("home", home != null ? home : new Home());
+    model.addAttribute("post", post != null ? post : new Post());
+
+    model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page - 1, currentUser.getPersAndFolPosts()));
     home.setCurrentUser(currentUser);
 
     return "main_template";
   }
 
   @RequestMapping(value = "/", method = RequestMethod.POST, params = "action=sendPost")
-  public String sendPost(@Valid @ModelAttribute Post post, BindingResult bindingResult, @ModelAttribute User user, @ModelAttribute Home home, Model model, HttpServletRequest req) {
+  public String sendPost(@Valid @ModelAttribute Post post, BindingResult bindingResult, @ModelAttribute User user,
+      @ModelAttribute Home home, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
 
     model.addAttribute("user", currentUser);
@@ -58,7 +73,6 @@ public class HomeController {
     home.setCurrentUser(currentUser);
     home.setIsself(true);
     home.setActivetab("timeline-my");
-
 
     if (bindingResult.hasErrors())
       return "main_template";
@@ -70,8 +84,23 @@ public class HomeController {
   @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=showFollows")
   public String showFollows(@ModelAttribute Home home, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
-    Set<String> ulist = currentUser.getFollows();
-    model.addAttribute("ulist", ulist);
+
+    model.addAttribute("ulist", BloguxUtils.getUserListByPage(0, currentUser.getFollows()));
+    home.setCurrentUser(currentUser);
+    home.setActivetab("follows");
+    home.setIsself(true);
+
+    return "main_template";
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = { "action=showFollows", "page" })
+  public String showFollowsPaged(@ModelAttribute Home home, @RequestParam(value = "page") int page, Model model,
+      HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    if (page == 0)
+      return "redirect:/?action=showFollows";
+
+    model.addAttribute("ulist", BloguxUtils.getUserListByPage(page - 1, currentUser.getFollows()));
     home.setCurrentUser(currentUser);
     home.setActivetab("follows");
     home.setIsself(true);
@@ -82,8 +111,24 @@ public class HomeController {
   @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=showFollowers")
   public String showFollowers(@ModelAttribute Home home, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
-    Set<String> ulist = currentUser.getFollowers();
-    model.addAttribute("ulist", ulist);
+
+    model.addAttribute("ulist", BloguxUtils.getUserListByPage(0, currentUser.getFollowers()));
+    home.setCurrentUser(currentUser);
+    home.setActivetab("followers");
+    home.setIsself(true);
+
+    return "main_template";
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = { "action=showFollowers", "page" })
+  public String showFollowersPaged(@ModelAttribute Home home, @RequestParam(value = "page") int page, Model model,
+      HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+
+    if (page == 0)
+      return "redirect:/?action=showFollowers";
+
+    model.addAttribute("ulist", BloguxUtils.getUserListByPage(page - 1, currentUser.getFollowers()));
     home.setCurrentUser(currentUser);
     home.setActivetab("followers");
     home.setIsself(true);
@@ -94,8 +139,9 @@ public class HomeController {
   @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=showGlobal")
   public String showMyGlobal(@ModelAttribute Home home, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
+    //TODO:Can be optimized
     List<Post> plist = postRepository.getGlobalPostsInRange(0, -1);
-    model.addAttribute("plist", plist);
+    model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(0, plist));
     home.setCurrentUser(currentUser);
     home.setActivetab("timeline-gl");
     home.setIsself(true);
@@ -103,16 +149,18 @@ public class HomeController {
     return "main_template";
   }
 
-  @RequestMapping(value = "/", method = RequestMethod.POST, params = "action=search")
-  public String searchUsers(@ModelAttribute User user, @ModelAttribute Home home, Model model,
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = { "action=showGlobal", "page" })
+  public String showMyGlobalPaged(@ModelAttribute Home home, @RequestParam(value = "page") int page, Model model,
       HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
-    Set<String> userList = userRepository.getSearchResults(home.getSrcPattern());
+    if (page == 0)
+      return "redirect:/?action=showGlobal";
 
-    model.addAttribute("ulist", userList);
-
+    //TODO:Can be optimized
+    List<Post> plist = postRepository.getGlobalPostsInRange(0, -1);
+    model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page - 1, plist));
     home.setCurrentUser(currentUser);
-    home.setActivetab("search");
+    home.setActivetab("timeline-gl");
     home.setIsself(true);
 
     return "main_template";
@@ -121,7 +169,26 @@ public class HomeController {
   @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=timeline-myposts")
   public String showMyPosts(@ModelAttribute Home home, @ModelAttribute Post post, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
-    model.addAttribute("plist", currentUser.getPersonalPosts());
+    model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(0, currentUser.getPersonalPosts()));
+    model.addAttribute("user", currentUser);
+    model.addAttribute("home", home != null ? home : new Home());
+    model.addAttribute("post", post != null ? post : new Post());
+
+    home.setCurrentUser(currentUser);
+    home.setActivetab("timeline-myposts");
+    home.setIsself(true);
+
+    return "main_template";
+  }
+
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = { "action=timeline-myposts", "page" })
+  public String showMyPostsPaged(@ModelAttribute Home home, @ModelAttribute Post post,
+      @RequestParam(value = "page") int page, Model model, HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    if (page == 0)
+      return "redirect:/?action=timeline-myposts";
+
+    model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page - 1, currentUser.getPersonalPosts()));
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     model.addAttribute("post", post != null ? post : new Post());
@@ -134,9 +201,10 @@ public class HomeController {
   }
 
   @RequestMapping(value = "/", method = RequestMethod.GET, params = "action=timeline-myfollows")
-  public String showMyFollowsPosts(@ModelAttribute Home home, @ModelAttribute Post post, Model model, HttpServletRequest req) {
+  public String showMyFollowsPosts(@ModelAttribute Home home, @ModelAttribute Post post, Model model,
+      HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
-    model.addAttribute("plist", currentUser.getFollowingPosts());
+    model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(0, currentUser.getFollowingPosts()));
     model.addAttribute("user", currentUser);
     model.addAttribute("home", home != null ? home : new Home());
     model.addAttribute("post", post != null ? post : new Post());
@@ -148,4 +216,22 @@ public class HomeController {
     return "main_template";
   }
 
+  @RequestMapping(value = "/", method = RequestMethod.GET, params = { "action=timeline-myfollows", "page" })
+  public String showMyFollowsPostsPaged(@ModelAttribute Home home, @ModelAttribute Post post,
+      @RequestParam(value = "page") int page, Model model, HttpServletRequest req) {
+    User currentUser = (User) req.getAttribute("currentUser");
+    if (page == 0)
+      return "redirect:/?action=timeline-myfollows";
+
+    model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page - 1, currentUser.getFollowingPosts()));
+    model.addAttribute("user", currentUser);
+    model.addAttribute("home", home != null ? home : new Home());
+    model.addAttribute("post", post != null ? post : new Post());
+
+    home.setCurrentUser(currentUser);
+    home.setActivetab("timeline-myfollows");
+    home.setIsself(true);
+
+    return "main_template";
+  }
 }

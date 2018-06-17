@@ -3,7 +3,6 @@ package de.hska.lkit.blogux.configuration;
 import de.hska.lkit.blogux.pubsub.MessagePublisherImpl;
 import de.hska.lkit.blogux.pubsub.MessagePublisher;
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import de.hska.lkit.blogux.pubsub.BloguxMessageSubscriber;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
