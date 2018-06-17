@@ -1,5 +1,7 @@
 package de.hska.lkit.blogux.controller;
 
+import org.springframework.messaging.handler.annotation.Payload;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import de.hska.lkit.blogux.socket.pojos.NewPostMsg;
@@ -14,7 +16,8 @@ public class NotificationController {
   private SimpMessagingTemplate template;
 
    @MessageMapping("/newpost")
-   public void notify(NewPostMsg message) throws Exception {
+   public void notify(@Valid @Payload NewPostMsg message) throws Exception {
+     
      template.convertAndSend("/topic/" + message.getName(),
       new NewPostNotification(message.getName(), message.getMsg()));
    }

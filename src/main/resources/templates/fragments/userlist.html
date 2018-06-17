@@ -4,7 +4,6 @@
     <div class="container-fluid bg-white rounded box-shadow">
       <th:block th:each="us : ${ulist}">
         <div class="media text-muted pt-3">
-          <img class="mb-4" th:src="@{/images/placeholder.png}" alt="" width="45" height="45">
           <strong class="d-block text-gray-dark">
             <a style="text-decoration:none" th:href="(@{/user/} + ${us})">
               <th:block th:utext="'@'+${us}"/>
