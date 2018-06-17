@@ -2,7 +2,6 @@ package de.hska.lkit.blogux.controller;
 
 import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
-import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.validation.BindingResult;
@@ -68,6 +67,7 @@ public class SettingsController {
       currentUser.setLastname(settings.getLastName());
       currentUser.setMail(settings.getMail());
       currentUser.setBio(settings.getBio());
+      currentUser.setNotifyMe(settings.getNotifyMe());
       home.setCurrentUser(currentUser);
 
       userRepository.saveUser(currentUser);

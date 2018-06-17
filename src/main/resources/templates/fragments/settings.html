@@ -16,14 +16,19 @@
          <label for="emailInput">Email address</label>
          <input th:field="*{mail}" type="email" class="form-control" id="emailInput" placeholder="blogux@example.com">
          <span th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}" class="text-danger help-block"/>
-      <div class="form-group">
+       <div class="form-group">
         <label for="emailInput">Bio</label>
         <textarea th:field="*{bio}" class="form-control" rows="5" ></textarea>
         <span th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}" class="text-danger help-block"/>
       </div>
-
+      <div class="form-group">
+        <div class="form-check">
+          <input th:field="*{notifyMe}" class="form-check-input" type="checkbox" id="notifCheck">
+          <label class="form-check-label" for="notifCheck">Enable notifications</label>
+        </div>
+      </div>
       <button name="action" value="saveSettings"
-       class="btn btn-lg btn-primary btn-block" type="submit">Save profile settings</button>
+       class="btn btn-primary" type="submit">Save profile settings</button>
     </form>
   </div>
 </html>

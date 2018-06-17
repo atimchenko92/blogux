@@ -17,6 +17,8 @@ public class Settings{
   @XSSSecurityConstraint
   private String mail;
 
+  private boolean notifyMe;
+
   public Settings(){
   }
 
@@ -25,6 +27,15 @@ public class Settings{
     setFirstName(currentUser.getFirstname());
     setLastName(currentUser.getLastname());
     setMail(currentUser.getMail());
+    setNotifyMe(currentUser.getNotifyMe());
+  }
+
+  public boolean getNotifyMe(){
+    return notifyMe;
+  }
+
+  public void setNotifyMe(boolean notifyMe){
+    this.notifyMe = notifyMe;
   }
 
   public void setBio(String bio){

@@ -117,19 +117,43 @@
 
       function connect() {
         var followsSet = /*[[${home.currentUser.follows}]]*/;
+        var notifyMe = /*[[${home.currentUser.notifyMe}]]*/;
         var socket = new SockJS('/bloguxSocket');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
            console.log('Connected: ' + frame);
-           for (var i in followsSet) {
-             stompClient.subscribe('/topic/'+followsSet[i], function (notify) {
-               var sender = JSON.parse(notify.body).sender;
-               var body = JSON.parse(notify.body).body;
-               var notif = "<div class='alert alert-warning alert-dismissible fade show' role='alert'><h4 class='alert-heading'><strong>@"+sender+"</strong> is buzzing...</h4>"+body+"<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
-               $('#notificationList').append( notif );
-             });
-           }
+           if(notifyMe)
+            subscribeToFollows(followsSet);
         });
+      }
+
+      function disconnect() {
+          if (stompClient !== null) {
+              stompClient.disconnect();
+          }
+          setConnected(false);
+          console.log("Disconnected");
+      }
+
+      function unSubscribe(){
+        if (stompClient !== null) {
+            stompClient.unSubscribe();
+            console.log("Unsubscribed");
+        }
+      }
+
+      function subscribeToFollows(followsSet){
+        if (stompClient !== null) {
+          for (var i in followsSet) {
+            stompClient.subscribe('/topic/'+followsSet[i], function (notify) {
+              var sender = JSON.parse(notify.body).sender;
+              var body = JSON.parse(notify.body).body;
+              var notif = "<div class='alert alert-warning alert-dismissible fade show' role='alert'><h4 class='alert-heading'><strong>@"+sender+"</strong> is buzzing...</h4>"+body+"<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
+              $('#notificationList').append( notif );
+            });
+          }
+          console.log('Subscribed');
+        }
       }
 
       /*]]>*/

@@ -103,6 +103,8 @@ public class UserRepositoryImpl implements UserRepository {
 		srt_hashOps.put(key, "id", id);
 		srt_hashOps.put(key, "username", formular.getName());
 		srt_hashOps.put(key, "password", formular.getPwd());
+		srt_hashOps.put(key, "notifyMe", "1");
+
 		// the key for a new user is added to the set for all usernames
 		srt_setOps.add(KEY_SET_ALL_USERNAMES, formular.getName());
 		// the key for a new user is added to the sorted set for all usernames
@@ -131,11 +133,13 @@ public class UserRepositoryImpl implements UserRepository {
 		oldUser.setLastname(user.getLastname());
 		oldUser.setMail(user.getMail());
 		oldUser.setBio(user.getBio());
+		oldUser.setNotifyMe(user.getNotifyMe());
 		//srt_hashOps.put(key, "password", formular.getPwd());
 		srt_hashOps.put(key, "firstname", oldUser.getFirstname());
 		srt_hashOps.put(key, "lastname", oldUser.getLastname());
 		srt_hashOps.put(key, "mail", oldUser.getMail());
 		srt_hashOps.put(key, "bio", oldUser.getBio());
+		srt_hashOps.put(key, "notifyMe", oldUser.getNotifyMe() ? "1" : "0");
 		rt_hashOps.put(KEY_HASH_ALL_USERS, key, oldUser);
 	}
 
@@ -170,6 +174,7 @@ public class UserRepositoryImpl implements UserRepository {
 			user.setPassword(srt_hashOps.get(key, "password"));
 			user.setMail(srt_hashOps.get(key, "mail"));
 			user.setBio(srt_hashOps.get(key, "bio"));
+			user.setNotifyMe(srt_hashOps.get(key, "notifyMe").equals("1") ? true : false);
 			user.setProfilePicture(srt_hashOps.get(key, "profilePicture"));
 			user.setFollows(getFollows(username));
 			user.setFollowers(getFollowers(username));

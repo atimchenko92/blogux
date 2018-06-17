@@ -21,6 +21,7 @@ public class User implements Serializable {
   private String mail;
   private String bio;
   private String profilePicture;
+  private boolean notifyMe;
 
   private Set<String> followers;
   private Set<String> follows;
@@ -102,6 +103,13 @@ public class User implements Serializable {
     this.bio = bio;
   }
 
+  public boolean getNotifyMe(){
+    return notifyMe;
+  }
+
+  public void setNotifyMe(boolean notifyMe){
+    this.notifyMe = notifyMe;
+  }
 
   public void setPassword(String password) {
     this.password = password;
