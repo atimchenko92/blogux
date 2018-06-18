@@ -9,7 +9,7 @@ import java.util.List;
 public class BloguxUtils {
 
   private static final int MAX_USERS_IN_PAGE = 8;
-  private static final int MAX_POSTS_IN_PAGE = 8;
+  private static final int MAX_POSTS_IN_PAGE = 5;
 
   public static final List<String> getUserListByPage(int page, Set<String> userSet) {
     List<String> userList = new ArrayList<String>();
@@ -31,6 +31,20 @@ public class BloguxUtils {
         : page * MAX_POSTS_IN_PAGE + MAX_POSTS_IN_PAGE;
 
     return postList.subList(idxFrom, idxTill);
+  }
+
+  public static final int getUserlistPagesNumber(Set<String> userSet) {
+    System.out.println("userset: " + userSet.size());
+    System.out.println("max: " + MAX_USERS_IN_PAGE);
+    System.out.println("division:"+ (userSet.size() / BloguxUtils.MAX_USERS_IN_PAGE + 1));
+    return userSet.size() / BloguxUtils.MAX_USERS_IN_PAGE + 1;
+  }
+
+  public static final int getTimelinePagesNumber(List<Post> postList) {
+    System.out.println("postlist: " + postList.size());
+    System.out.println("max: " + MAX_POSTS_IN_PAGE);
+    System.out.println("division:"+ (postList.size() / BloguxUtils.MAX_POSTS_IN_PAGE + 1));
+    return postList.size() / BloguxUtils.MAX_POSTS_IN_PAGE + 1;
   }
 
 }

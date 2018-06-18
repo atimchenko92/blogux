@@ -29,11 +29,10 @@ public class SearchController {
     this.userRepository = userRepository;
   }
 
-
   @RequestMapping(value = "/search", method = RequestMethod.POST)
   public String searchPost(@ModelAttribute Home home, Model model, HttpServletRequest req) {
     User currentUser = (User) req.getAttribute("currentUser");
-    System.out.println("in post"+home.getSrcPattern());
+    System.out.println("in post" + home.getSrcPattern());
 
     model.addAttribute("home", home);
 
@@ -41,10 +40,10 @@ public class SearchController {
     home.setActivetab("search");
     home.setIsself(true);
 
-    if(home.getSrcPattern().isEmpty())
+    if (home.getSrcPattern().isEmpty())
       return "redirect:/search";
     else
-      return "redirect:/search/"+home.getSrcPattern();
+      return "redirect:/search/" + home.getSrcPattern();
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -58,6 +57,7 @@ public class SearchController {
 
     home.setCurrentUser(currentUser);
     home.setActivetab("search");
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(userList));
     home.setIsself(true);
 
     return "main_template";
@@ -78,6 +78,7 @@ public class SearchController {
 
     home.setCurrentUser(currentUser);
     home.setActivetab("search");
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(userList));
     home.setIsself(true);
 
     return "main_template";
@@ -95,6 +96,7 @@ public class SearchController {
 
     home.setCurrentUser(currentUser);
     home.setActivetab("search");
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(userList));
     home.setIsself(true);
 
     return "main_template";
@@ -114,6 +116,7 @@ public class SearchController {
 
     home.setCurrentUser(currentUser);
     home.setActivetab("search");
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(userList));
     home.setIsself(true);
 
     return "main_template";

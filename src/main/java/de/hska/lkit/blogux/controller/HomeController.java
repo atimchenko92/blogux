@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 /**
  * @author atimchenko
  *
@@ -40,6 +41,7 @@ public class HomeController {
 
     model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(0, currentUser.getPersAndFolPosts()));
     home.setCurrentUser(currentUser);
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(currentUser.getPersAndFolPosts()));
 
     return "main_template";
   }
@@ -56,6 +58,7 @@ public class HomeController {
     model.addAttribute("post", post != null ? post : new Post());
 
     model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page - 1, currentUser.getPersAndFolPosts()));
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(currentUser.getPersAndFolPosts()));
     home.setCurrentUser(currentUser);
 
     return "main_template";
@@ -88,6 +91,7 @@ public class HomeController {
     model.addAttribute("ulist", BloguxUtils.getUserListByPage(0, currentUser.getFollows()));
     home.setCurrentUser(currentUser);
     home.setActivetab("follows");
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(currentUser.getFollows()));
     home.setIsself(true);
 
     return "main_template";
@@ -103,6 +107,7 @@ public class HomeController {
     model.addAttribute("ulist", BloguxUtils.getUserListByPage(page - 1, currentUser.getFollows()));
     home.setCurrentUser(currentUser);
     home.setActivetab("follows");
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(currentUser.getFollows()));
     home.setIsself(true);
 
     return "main_template";
@@ -115,6 +120,7 @@ public class HomeController {
     model.addAttribute("ulist", BloguxUtils.getUserListByPage(0, currentUser.getFollowers()));
     home.setCurrentUser(currentUser);
     home.setActivetab("followers");
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(currentUser.getFollowers()));
     home.setIsself(true);
 
     return "main_template";
@@ -131,6 +137,7 @@ public class HomeController {
     model.addAttribute("ulist", BloguxUtils.getUserListByPage(page - 1, currentUser.getFollowers()));
     home.setCurrentUser(currentUser);
     home.setActivetab("followers");
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(currentUser.getFollowers()));
     home.setIsself(true);
 
     return "main_template";
@@ -144,6 +151,7 @@ public class HomeController {
     model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(0, plist));
     home.setCurrentUser(currentUser);
     home.setActivetab("timeline-gl");
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(plist));
     home.setIsself(true);
 
     return "main_template";
@@ -161,6 +169,7 @@ public class HomeController {
     model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page - 1, plist));
     home.setCurrentUser(currentUser);
     home.setActivetab("timeline-gl");
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(plist));
     home.setIsself(true);
 
     return "main_template";
@@ -176,6 +185,7 @@ public class HomeController {
 
     home.setCurrentUser(currentUser);
     home.setActivetab("timeline-myposts");
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(currentUser.getPersonalPosts()));
     home.setIsself(true);
 
     return "main_template";
@@ -195,6 +205,7 @@ public class HomeController {
 
     home.setCurrentUser(currentUser);
     home.setActivetab("timeline-myposts");
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(currentUser.getPersonalPosts()));
     home.setIsself(true);
 
     return "main_template";
@@ -211,6 +222,7 @@ public class HomeController {
 
     home.setCurrentUser(currentUser);
     home.setActivetab("timeline-myfollows");
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(currentUser.getFollowingPosts()));
     home.setIsself(true);
 
     return "main_template";
@@ -230,6 +242,7 @@ public class HomeController {
 
     home.setCurrentUser(currentUser);
     home.setActivetab("timeline-myfollows");
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(currentUser.getFollowingPosts()));
     home.setIsself(true);
 
     return "main_template";

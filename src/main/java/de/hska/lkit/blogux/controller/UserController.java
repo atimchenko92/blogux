@@ -47,7 +47,9 @@ public class UserController {
 		model.addAttribute("user", inspectedUser != null ? inspectedUser : new User());
 		model.addAttribute("home", home != null ? home : new Home());
 		model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(0, inspectedUser.getPersonalPosts()));
+
 		home.setIsself(false);
+		home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(inspectedUser.getPersonalPosts()));
 		home.setCurrentUser(currentUser);
 
 		return "main_template";
@@ -69,7 +71,9 @@ public class UserController {
 		model.addAttribute("user", inspectedUser != null ? inspectedUser : new User());
 		model.addAttribute("home", home != null ? home : new Home());
 		model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page, inspectedUser.getPersonalPosts()));
+
 		home.setIsself(false);
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(inspectedUser.getPersonalPosts()));
 		home.setCurrentUser(currentUser);
 
 		return "main_template";
@@ -111,6 +115,8 @@ public class UserController {
 		home.setActivetab("follows");
 		home.setCurrentUser(currentUser);
 		home.setIsself(false);
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(inspectedUser.getFollows()));
+    System.out.println("user timeline pages number:"+home.getPagesAmount());
 
 		return "main_template";
 	}
@@ -135,6 +141,8 @@ public class UserController {
 		home.setActivetab("follows");
 		home.setCurrentUser(currentUser);
 		home.setIsself(false);
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(inspectedUser.getFollows()));
+    System.out.println("user timeline pages number:"+home.getPagesAmount());
 
 		return "main_template";
 	}
@@ -156,6 +164,7 @@ public class UserController {
 		home.setCurrentUser(currentUser);
 		home.setActivetab("followers");
 		home.setIsself(false);
+  	home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(inspectedUser.getFollowers()));
 
 		return "main_template";
 	}
@@ -180,6 +189,7 @@ public class UserController {
 		home.setCurrentUser(currentUser);
 		home.setActivetab("followers");
 		home.setIsself(false);
+    home.setPagesAmount(BloguxUtils.getUserlistPagesNumber(inspectedUser.getFollowers()));
 
 		return "main_template";
 	}
@@ -203,6 +213,7 @@ public class UserController {
 		home.setCurrentUser(currentUser);
 		home.setActivetab("timeline-gl");
 		home.setIsself(false);
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(plist));
 
 		return "main_template";
 	}
@@ -229,6 +240,7 @@ public class UserController {
 		home.setCurrentUser(currentUser);
 		home.setActivetab("timeline-gl");
 		home.setIsself(false);
+    home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(plist));
 
 		return "main_template";
 	}

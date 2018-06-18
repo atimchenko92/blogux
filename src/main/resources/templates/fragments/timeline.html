@@ -4,6 +4,27 @@
     <div class="my-3 p-3 bg-white rounded box-shadow container-fluid">
       <div th:if="${plist.size()} gt '0'">
         <h6 class="border-bottom border-gray pb-2 mb-0">Recent posts</h6>
+        <div th:if="${home.pagesAmount} gt '1'">
+          <ul class="pagination">
+           <li class="page-item" th:each="pageIdx : ${#numbers.sequence(1, home.pagesAmount)}"
+            th:classappend="(${param.page != null} and ${#strings.equals(param.page[0], #strings.toString(pageIdx))}) ? 'active' : ''">
+             <th:block th:switch="${home.activetab}">
+               <div th:case="timeline-my">
+                 <a th:href="@{''(page=${pageIdx})}" th:text="${pageIdx}" class="page-link"/>
+               </div>
+               <div th:case="timeline-myposts">
+                 <a th:href="@{''(action=timeline-myposts, page=${pageIdx})}" th:text="${pageIdx}" class="page-link"/>
+               </div>
+               <div th:case="timeline-myfollows">
+                 <a th:href="@{''(action=timeline-myfollows, page=${pageIdx})}" th:text="${pageIdx}" class="page-link"/>
+               </div>
+               <div th:case="timeline-gl">
+                 <a th:href="@{''(action=showGlobal, page=${pageIdx})}" th:text="${pageIdx}" class="page-link"/>
+               </div>
+             </th:block>
+           </li>
+          </ul>
+        </div>
         <th:block th:each="p : ${plist}">
           <div class="media text-muted pt-3">
             <th:block th:switch="${#strings.isEmpty(p.profilePicture)}">
@@ -27,7 +48,7 @@
           </div>
         </th:block>
       </div>
-      <div th:if="${plist.size()} eq '0'">
+      <div th:if="${plist.size()} eq '0' and ${home.pagesAmount} eq '1'">
         <div class="jumbotron jumbotron-fluid">
           <div class="container">
             <div th:if="(${home.activetab} eq 'timeline-my') or (${home.activetab} eq 'timeline-myposts')">
@@ -43,16 +64,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <div th:if="${plist.size()} gt '10'">
-        <ul class="pagination">
-         <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-         <li class="page-item"><a class="page-link" href="#">1</a></li>
-         <li class="page-item active"><a class="page-link" href="#">2</a></li>
-         <li class="page-item"><a class="page-link" href="#">3</a></li>
-         <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
       </div>
     </div>
   </div>
