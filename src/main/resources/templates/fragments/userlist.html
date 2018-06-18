@@ -6,6 +6,12 @@
         <div th:case="search">
           <h6 class="border-bottom border-gray pb-2 mb-0">Users found:</h6>
         </div>
+        <div th:case="follows">
+          <h6 class="border-bottom border-gray pb-2 mb-0">Follows list:</h6>
+        </div>
+        <div th:case="followers">
+          <h6 class="border-bottom border-gray pb-2 mb-0">Followers list:</h6>
+        </div>
       </th:block>
       <div th:if="${home.pagesAmount} gt '1'">
         <ul class="pagination">

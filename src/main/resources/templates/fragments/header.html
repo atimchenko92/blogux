@@ -36,8 +36,8 @@
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" th:action="@{/search}" th:object="${home}" method="post">
-          <input th:field="*{srcPattern}" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <input th:field="*{srcPattern}" class="form-control mr-sm-2" type="text" placeholder="e.g Timifikator" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search users</button>
         </form>
         <ul class="navbar-nav mr-auto">
           <li th:class="${home.activetab.equals('settings' )} ? ('nav-item active') : ('nav-item')">
