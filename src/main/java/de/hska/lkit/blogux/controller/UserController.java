@@ -70,7 +70,7 @@ public class UserController {
 
 		model.addAttribute("user", inspectedUser != null ? inspectedUser : new User());
 		model.addAttribute("home", home != null ? home : new Home());
-		model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page, inspectedUser.getPersonalPosts()));
+		model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page - 1, inspectedUser.getPersonalPosts()));
 
 		home.setIsself(false);
     home.setPagesAmount(BloguxUtils.getTimelinePagesNumber(inspectedUser.getPersonalPosts()));
@@ -234,7 +234,7 @@ public class UserController {
 		//TODO: should be optimized
 		List<Post> plist = postRepository.getGlobalPostsInRange(0, -1);
 
-		model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page, plist));
+		model.addAttribute("plist", BloguxUtils.getTimelinePostsByPage(page - 1, plist));
 		model.addAttribute("user", inspectedUser);
 
 		home.setCurrentUser(currentUser);
