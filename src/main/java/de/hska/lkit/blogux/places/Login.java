@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.places;
 
+import javax.validation.constraints.Size;
 import javax.validation.constraints.NotEmpty;
 import de.hska.lkit.blogux.util.XSSSecurityConstraint;
 import de.hska.lkit.blogux.util.UserExistsConstraint;
@@ -9,6 +10,7 @@ public class Login {
   @UserExistsConstraint
   @XSSSecurityConstraint
   @NotEmpty
+  @Size(min=1, max=12, message="Username may only contain from 1 up to 12 characters")
   private String name;
 
   private String pwd;

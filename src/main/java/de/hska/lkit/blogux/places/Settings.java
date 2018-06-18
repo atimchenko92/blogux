@@ -1,19 +1,24 @@
 package de.hska.lkit.blogux.places;
 
+import javax.validation.constraints.Size;
 import de.hska.lkit.blogux.util.XSSSecurityConstraint;
 import de.hska.lkit.blogux.model.User;
 
 public class Settings{
 
+  @Size(max=80, message="Max. 80 characters")
   @XSSSecurityConstraint
   private String bio;
 
+  @Size(max=12, message="Max. 12 characters")
   @XSSSecurityConstraint
   private String firstName;
 
+  @Size(max=20, message="Max. 20 characters")
   @XSSSecurityConstraint
   private String lastName;
 
+  @Size(max=30, message="Max. 30 characters")
   @XSSSecurityConstraint
   private String mail;
 
