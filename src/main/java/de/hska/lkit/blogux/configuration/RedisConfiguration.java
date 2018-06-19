@@ -1,10 +1,9 @@
 package de.hska.lkit.blogux.configuration;
 
-import de.hska.lkit.blogux.pubsub.MessagePublisherImpl;
-import de.hska.lkit.blogux.pubsub.MessagePublisher;
-import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import de.hska.lkit.blogux.pubsub.BloguxMessageSubscriber;
+import de.hska.lkit.blogux.pubsub.Receiver;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +16,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfiguration {
 	@Bean
 	public JedisConnectionFactory getConnectionFactory() {
-		// falls andere als die Default Werte gesetzt werden sollen
+	// falls andere als die Default Werte gesetzt werden sollen
 	//	JedisConnectionFactory jRedisConnectionFactory = new JedisConnectionFactory(new JedisPoolConfig());
 	//	jRedisConnectionFactory.setHostName("localhost");
 	//  jRedisConnectionFactory.setPort(6379);
@@ -43,26 +42,22 @@ public class RedisConfiguration {
 	}
 
 	@Bean
-	MessageListenerAdapter messageListener() {
-		return new MessageListenerAdapter(new BloguxMessageSubscriber());
+	MessageListenerAdapter listenerAdapter(Receiver receiver) {
+		return new MessageListenerAdapter(receiver, "receiveMessage");
 	}
 
 	@Bean
-	RedisMessageListenerContainer container() {
+	Receiver receiver() {
+		return new Receiver();
+	}
+
+	@Bean
+	RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
+			MessageListenerAdapter listenerAdapter) {
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 		container.setConnectionFactory(getConnectionFactory());
-		container.addMessageListener(messageListener(), topic());
+		container.addMessageListener(listenerAdapter, new PatternTopic("redisChannel"));
 		return container;
-	}
-
-	@Bean
-	ChannelTopic topic() {
-		return new ChannelTopic("messageQueue");
-	}
-
-	@Bean
-	MessagePublisher redisPublisher() {
-    return new MessagePublisherImpl(getRedisTemplate(), topic());
 	}
 
 }
