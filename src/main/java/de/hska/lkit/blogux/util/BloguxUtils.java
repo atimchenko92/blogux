@@ -34,17 +34,13 @@ public class BloguxUtils {
   }
 
   public static final int getUserlistPagesNumber(Set<String> userSet) {
-    System.out.println("userset: " + userSet.size());
-    System.out.println("max: " + MAX_USERS_IN_PAGE);
-    System.out.println("division:"+ (userSet.size() / BloguxUtils.MAX_USERS_IN_PAGE + 1));
-    return userSet.size() / BloguxUtils.MAX_USERS_IN_PAGE + 1;
+    int pg = userSet.size() % BloguxUtils.MAX_USERS_IN_PAGE == 0 ? 0 : 1;
+    return userSet.size() / BloguxUtils.MAX_USERS_IN_PAGE + pg;
   }
 
   public static final int getTimelinePagesNumber(List<Post> postList) {
-    System.out.println("postlist: " + postList.size());
-    System.out.println("max: " + MAX_POSTS_IN_PAGE);
-    System.out.println("division:"+ (postList.size() / BloguxUtils.MAX_POSTS_IN_PAGE + 1));
-    return postList.size() / BloguxUtils.MAX_POSTS_IN_PAGE + 1;
+    int pg = postList.size() % BloguxUtils.MAX_POSTS_IN_PAGE == 0 ? 0 : 1;
+    return postList.size() / BloguxUtils.MAX_POSTS_IN_PAGE + pg;
   }
 
 }
