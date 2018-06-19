@@ -23,9 +23,8 @@ public class NotificationController {
    public void notify(@Valid @Payload NewPostMsg message) throws Exception {
 
      // send directly throug STOMP at same Application
-     messagingStopmTemplate.convertAndSend("/topic/" + message.getName(),
-      new NewPostNotification(message.getName(), message.getMsg()));
-
+     // messagingStopmTemplate.convertAndSend("/topic/" + message.getName(), new NewPostNotification(message.getName(), message.getMsg()));
+     // here occurs Problem with double Messaging if Client go throug same App-Instanse
      // send directly in RedisQueue
      String redisQueue = patterToSendRedisQueue(message.getName(), message.getMsg());
      stringRedisTemplate.convertAndSend("redisChannel", redisQueue);
