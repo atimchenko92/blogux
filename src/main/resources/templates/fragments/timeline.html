@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <div th:fragment="timeline">
     <div class="my-3 p-3 bg-white rounded box-shadow container-fluid">
-      <div th:if="${plist.size()} gt '0'">
         <h6 class="border-bottom border-gray pb-2 mb-0">Recent posts</h6>
         <div th:if="${home.pagesAmount} gt '1'">
           <ul class="pagination">
@@ -47,8 +46,7 @@
             <p class="text-right font-weight-light" th:text="${p.getDatetime()}"></p>
           </div>
         </th:block>
-      </div>
-      <div th:if="${plist.size()} eq '0' and ${home.pagesAmount} eq '1'">
+      <div th:if="${plist.size()} eq '0'">
         <div class="jumbotron jumbotron-fluid">
           <div class="container">
             <div th:if="(${home.activetab} eq 'timeline-my') or (${home.activetab} eq 'timeline-myposts')">
@@ -61,6 +59,10 @@
                 <a style="text-decoration:none" th:href="${home.isself} ? @{/(action=showGlobal)} : (@{/user/} + ${user.username} + @{'?action=showGlobal'})">
                 community</a> :)
               </p>
+            </div>
+            <div th:if="${home.activetab} eq 'timeline-gl'">
+              <h1 class="display-4">No Posts yet...</h1>
+              <p class="lead">Take a chance and post something :)</p>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 package de.hska.lkit.blogux.repo.impl;
 
+import org.springframework.data.redis.core.ValueOperations;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.ArrayList;
@@ -9,7 +10,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -51,11 +51,6 @@ public class PostRepositoryImpl implements PostRepository {
 	private StringRedisTemplate stringRedisTemplate;
 
 	/**
-	 * to save user data as object
-	 */
-	private RedisTemplate<String, Object> redisTemplate;
-
-	/**
 	 * hash operations for stringRedisTemplate
 	 */
 	private HashOperations<String, String, String> srt_hashOps;
@@ -76,14 +71,18 @@ public class PostRepositoryImpl implements PostRepository {
 	private ListOperations<String, String> srt_listOps;
 
 	/**
+	* Value operations
+	**/
+	private ValueOperations<String, String> val_Opts;
+
+	/**
 	 * hash operations for redisTemplate
 	 */
 	@Resource(name = "redisTemplate")
 	private HashOperations<String, String, Post> rt_hashOps;
 
 	@Autowired
-	public PostRepositoryImpl(RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate) {
-		this.redisTemplate = redisTemplate;
+	public PostRepositoryImpl(StringRedisTemplate stringRedisTemplate) {
 		this.stringRedisTemplate = stringRedisTemplate;
 		this.postid = new RedisAtomicLong("postid", stringRedisTemplate.getConnectionFactory());
 	}
@@ -94,6 +93,7 @@ public class PostRepositoryImpl implements PostRepository {
 		srt_setOps = stringRedisTemplate.opsForSet();
 		srt_zSetOps = stringRedisTemplate.opsForZSet();
 		srt_listOps = stringRedisTemplate.opsForList();
+		val_Opts = stringRedisTemplate.opsForValue();
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class PostRepositoryImpl implements PostRepository {
 			post.setAuthor(srt_hashOps.get(key, "author"));
 			post.setDatetime(srt_hashOps.get(key, "datetime"));
 			post.setText(srt_hashOps.get(key, "text"));
-			post.setProfilePicture(srt_hashOps.get("user:"+post.getAuthor(), "profilePicture"));
+			post.setProfilePicture(val_Opts.get("user:"+post.getAuthor()+":profilePicture"));
 
 			return post;
 		}

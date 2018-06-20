@@ -40,6 +40,27 @@
           </strong>
         </div>
       </th:block>
+      <div th:if="${ulist.size()} eq '0'">
+        <div class="jumbotron jumbotron-fluid">
+          <div class="container">
+            <div th:if="${home.activetab} eq 'followers'">
+              <h1 class="display-4">No followers yet...</h1>
+              <div th:if="${home.isself} == true">
+                <p class="lead" th:text="'Make yourself interesting to community and publish a post :)'"></p>
+              </div>
+            </div>
+            <div th:if="${home.activetab} eq 'follows'">
+              <h1 class="display-4">Not following anyone yet...</h1>
+              <div th:if="${home.isself} == true">
+                <p class="lead">Come along and find interesting people from blogux
+                  <a style="text-decoration:none" th:href="@{/(action=showGlobal)}">
+                  community</a> :)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </html>

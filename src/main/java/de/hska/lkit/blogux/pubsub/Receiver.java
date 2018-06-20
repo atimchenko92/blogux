@@ -12,8 +12,8 @@ public class Receiver {
   @Autowired
   public Receiver(){}
 
-  // 2 means Analyse max 2 Words
-  // tokensVal = name | massage
+  // 2 means analyze max. 2 words
+  // tokensVal = name | message
   public void receiveMessage(String message) {
     String[] tokensVal = message.split("\\|", 2);
     messagingStopmTemplate.convertAndSend("/topic/" + tokensVal[0],

@@ -16,7 +16,6 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -38,17 +37,13 @@ public class UserRepositoryImpl implements UserRepository {
 
 	private static final String KEY_SEARCH_SET = "search:set";
 
+
 	private RedisAtomicLong userid;
 
 	/**
 	 * to save data in String format
 	 */
 	private StringRedisTemplate stringRedisTemplate;
-
-	/**
-	 * to save user data as object
-	 */
-	private RedisTemplate<String, Object> redisTemplate;
 
 	/**
 	 * hash operations for stringRedisTemplate
@@ -80,8 +75,7 @@ public class UserRepositoryImpl implements UserRepository {
 	private PostRepository postRepository;
 
 	@Autowired
-	public UserRepositoryImpl(RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate) {
-		this.redisTemplate = redisTemplate;
+	public UserRepositoryImpl(StringRedisTemplate stringRedisTemplate) {
 		this.stringRedisTemplate = stringRedisTemplate;
 		this.userid = new RedisAtomicLong("userid", stringRedisTemplate.getConnectionFactory());
 	}
@@ -145,12 +139,11 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public void saveProfilePic(User user){
-		String key = KEY_PREFIX_USER + user.getUsername();
+		String key = KEY_PREFIX_USER + user.getUsername() + ":profilePicture";
 		User oldUser = null;
 		oldUser = getUser(user.getUsername());
 		oldUser.setProfilePicture(user.getProfilePicture());
-		srt_hashOps.put(key, "profilePicture", oldUser.getProfilePicture());
-		rt_hashOps.put(KEY_HASH_ALL_USERS, key, oldUser);
+		val_Opts.set(key, user.getProfilePicture());
 	}
 
 	@Override
@@ -175,7 +168,7 @@ public class UserRepositoryImpl implements UserRepository {
 			user.setMail(srt_hashOps.get(key, "mail"));
 			user.setBio(srt_hashOps.get(key, "bio"));
 			user.setNotifyMe(srt_hashOps.get(key, "notifyMe").equals("1") ? true : false);
-			user.setProfilePicture(srt_hashOps.get(key, "profilePicture"));
+			user.setProfilePicture(val_Opts.get(key+":profilePicture"));
 			user.setFollows(getFollows(username));
 			user.setFollowers(getFollowers(username));
 
